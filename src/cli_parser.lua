@@ -7,9 +7,19 @@ local function setup_stats_cmd(parser)
 end
 
 local function setup_daemon_cmd(parser)
-   parser
+   local daemon_cmd = parser
        :command('daemon')
        :summary('Start battery log daemon in foreground')
+
+   daemon_cmd
+       :option('-l --log-directory', 'Directory to save battery logs to')
+       :args(1)
+       :default('$XDG_DATA_HOME/batstat')
+
+   daemon_cmd
+       :option('-i --interval-in-seconds', 'Interval in seconds between log entries')
+       :args(1)
+       :default(60)
 end
 
 local parser = argparse()
