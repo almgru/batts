@@ -20,6 +20,7 @@ build = {
    modules = {
       cli_parser = 'src/cli_parser.lua',
       daemon = 'src/daemon.lua',
+      stats = 'src/stats.lua'
    },
    install = {
       bin = {
