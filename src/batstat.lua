@@ -24,14 +24,8 @@ elseif args.stats then
       }
    end
 
-   local function subrange(t, first, last)
-      local sub = {}
-
-      for i = first, last do
-         sub[#sub + 1] = t[i]
-      end
-
-      return sub
+   local function get_hours_and_minutes(minutes)
+      return math.floor(minutes / 60), math.floor((minutes % 60) + 0.5)
    end
 
    local log_file, log_file_err = io.open('/home/almgru/.local/share/batstat/BAT1.log', 'r')
@@ -90,65 +84,28 @@ elseif args.stats then
 
    local discharge_per_minute = {}
 
-   for index, item in ipairs(discharge_durations) do
-      print('discharge_durations[' .. index .. '] = {')
-      print('  capacity_delta = ' .. item.capacity_delta)
-      print('  duration = ' .. item.duration)
-      print('}')
-
+   local duration_sum = 0
+   for _, item in ipairs(discharge_durations) do
       table.insert(discharge_per_minute, item.capacity_delta / item.duration)
+      duration_sum = duration_sum + item.duration
    end
 
-   local sum = 0
-   for index, value in ipairs(discharge_per_minute) do
-      print('discharge_per_minute[' .. index .. '] = ' .. value)
-      sum = sum + value
+   local discharge_per_minute_sum = 0
+   for _, value in ipairs(discharge_per_minute) do
+      discharge_per_minute_sum = discharge_per_minute_sum + value
    end
 
-   local mean_discharge_per_minute = sum / #discharge_per_minute
+   local mean_duration = duration_sum / #discharge_durations
+   local mean_duration_hours, mean_duration_minutes = get_hours_and_minutes(mean_duration)
+   local mean_discharge_per_minute = discharge_per_minute_sum / #discharge_per_minute
+   local extrapolated_hours, extrapolated_minutes = get_hours_and_minutes(100 / mean_discharge_per_minute)
 
-   print('mean discharge time: TODO')
-   print('mean discharge rate per hour: ' .. mean_discharge_per_minute * 60 .. '%')
-   print('extrapolated mean full charge discharge time: ' .. 100 / mean_discharge_per_minute)
-
-   --table.sort(discharge_durations, function(a, b) return a.duration < b.duration end)
-   --local lower_half = #discharge_durations % 2 == 1
-   --    and subrange(discharge_durations, 1, math.floor(#discharge_durations / 2))
-   --    or subrange(discharge_durations, 1, #discharge_durations / 2)
-   --local upper_half = #discharge_durations % 2 == 1
-   --    and subrange(discharge_durations, math.ceil(#discharge_durations / 2) + 1, #discharge_durations)
-   --    or subrange(discharge_durations, #discharge_durations / 2, #discharge_durations)
-   --local lqr = #lower_half % 2 == 1
-   --    and lower_half[math.ceil(#lower_half / 2)].duration
-   --    or (lower_half[#lower_half / 2].duration + lower_half[#lower_half / 2 + 1].duration) / 2
-   --local uqr = #upper_half % 2 == 1
-   --    and upper_half[math.ceil(#upper_half / 2)].duration
-   --    or (upper_half[#upper_half].duration / 2 + upper_half[#upper_half / 2 + 1].duration) / 2
-
-   --local discharge_durations_without_outliers = {}
-
-   --print('lqr = ' .. lqr .. ', uqr = ' .. uqr)
-
-   --for _, v in ipairs(discharge_durations) do
-   --   if v.sessions_duration >= lqr and v.sessions_duration <= uqr then
-   --      table.insert(discharge_durations_without_outliers, #discharge_durations_without_outliers + 1, v)
-   --   end
-   --end
-
-   --local sum = 0
-   --for _, v in ipairs(discharge_durations_without_outliers) do
-   --   sum = sum + v.sessions_duration
-   --end
-
-   --local mean_discharge_time_in_min = sum / #discharge_durations_without_outliers
-   --local mean_discharge_time_h = math.floor((sum / #discharge_durations_without_outliers) / 60)
-   --local mean_discharge_time_min = math.floor(((sum / #discharge_durations_without_outliers) % 60) + 0.5)
-   --local extrapolated_h = math.floor((mean_discharge_time_in_min / 0.2) / 60)
-   --local extrapolated_min = math.floor(((mean_discharge_time_in_min / 0.2) % 60) + 0.5)
-
-   --print('mean discharge time: ' .. mean_discharge_time_h .. ' hours, ' .. mean_discharge_time_min .. ' minutes')
-   --print('extrapolated mean full charge discharge time ' ..
-   --   extrapolated_h .. ' hours, ' .. extrapolated_min .. ' minutes')
+   print('TODO: filter out outliers')
+   print('TODO: stdev for "mean discharge time" and "mean discharge rate per hour"')
+   print('mean discharge time: ' .. mean_duration_hours .. ' hours, ' .. mean_duration_minutes .. ' minutes')
+   print('mean discharge rate per hour: ' .. string.format('%.2f', mean_discharge_per_minute * 60) .. '%')
+   print('extrapolated mean full charge discharge time: ' ..
+      extrapolated_hours .. ' hours, ' .. extrapolated_minutes .. ' minutes')
 
 elseif args.daemon then
    if args.log_directory == '$XDG_DATA_HOME/batstat' then
