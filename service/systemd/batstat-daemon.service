@@ -1,0 +1,9 @@
+[Unit]
+Description=batstat daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env batstat daemon
+
+[Install]
+WantedBy=default.target
