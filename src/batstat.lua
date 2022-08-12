@@ -31,29 +31,48 @@ elseif args.stats then
    end
 
    local prev_line
+   local charge_cycle = 0
+   local discharge_durations = {}
+   local sessions_duration = 0
+   local session_start = 0
+   local charge_cycle_start
 
    for line in log_file:lines() do
-      local charge_cycle = 1
+      local curr = parse_log_entry(line)
 
       if prev_line ~= nil then
          local prev = parse_log_entry(prev_line)
-         local curr = parse_log_entry(line)
-
-         if curr.timestamp - prev.timestamp > 60 then
-            print('new session in charge cycle ' .. charge_cycle)
-         end
 
          if prev.status ~= 'Discharging' and curr.status == 'Discharging' then
             charge_cycle = charge_cycle + 1
-            print('start of charge cycle ' .. charge_cycle)
+            charge_cycle_start = curr.timestamp
+            sessions_duration = 0
+            session_start = curr.timestamp
          elseif prev.status == 'Discharging' and curr.status ~= prev.status then
-            print('end of charge cycle ' .. charge_cycle)
+            if sessions_duration > 0 then
+               sessions_duration = sessions_duration + math.floor(((prev.timestamp - session_start) / 60) + 0.5)
+               table.insert(discharge_durations, sessions_duration)
+            else
+               table.insert(discharge_durations, math.floor(((prev.timestamp - charge_cycle_start) / 60) + 0.5))
+            end
+
+            sessions_duration = 0
+            session_start = curr.timestamp
+         elseif curr.timestamp - prev.timestamp > 180 then
+            sessions_duration = sessions_duration + math.floor(((prev.timestamp - session_start) / 60) + 0.5)
+            session_start = curr.timestamp
          end
-      else
-         print('start of charge cycle ' .. charge_cycle)
+      elseif curr.status == 'Discharging' then
+         charge_cycle = 1
+         charge_cycle_start = curr.timestamp
+         session_start = curr.timestamp
       end
 
       prev_line = line
+   end
+
+   for k, v in pairs(discharge_durations) do
+      print('discharge duration ' .. k .. ' = ' .. v)
    end
 
 elseif args.daemon then
