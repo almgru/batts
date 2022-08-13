@@ -7,6 +7,7 @@ pkgs.mkShell {
         pkgs.luajit
         pkgs.shellcheck
         pkgs.luajitPackages.luarocks
+        pkgs.luajitPackages.luacov
         pkgs.sumneko-lua-language-server
     ];
 }
