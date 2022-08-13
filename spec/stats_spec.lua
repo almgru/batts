@@ -1,0 +1,32 @@
+local stats = require('stats')
+
+describe('stats', function()
+   describe('mean', function()
+      it('calculates the mean of elements in a table', function()
+         assert.is.same(5, stats.mean({ 10, 0, 4, 6 }))
+      end)
+   end)
+
+   describe('variance', function()
+      it('calculates the variance of elements in a table', function()
+         assert.is.equal(2 / 3, stats.variance({ 1, 2, 3 }, 2))
+      end)
+   end)
+
+   describe('standard_deviation', function()
+      it('calculates the standard deviation for elements in a table', function()
+         assert.is.equal(0.5, stats.standard_deviation({ 1, 2, 1, 2 }))
+      end)
+   end)
+
+   describe('z_scores', function()
+      it('calculates the standard score for elements in a table', function()
+         assert.is.same({ -1, -1, 1, 1 }, stats.z_scores({ 1, 1, 5, 5 }, 3, 2))
+      end)
+   end)
+
+   describe('filter_out_outliers', function()
+      pending('removes outliers from a table', function()
+      end)
+   end)
+end)

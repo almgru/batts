@@ -1,6 +1,6 @@
 local stats = {}
 
-local z_score_filter_threshold = 10
+local z_score_filter_threshold = 2.5
 
 function stats.mean(data)
    local sum = 0
@@ -19,7 +19,7 @@ function stats.variance(data, mean)
       table.insert(deviations, k, math.pow(v - mean, 2))
    end
 
-   return stats.mean(deviations) / #deviations
+   return stats.mean(deviations)
 end
 
 function stats.standard_deviation(data)
