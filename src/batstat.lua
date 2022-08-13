@@ -39,6 +39,20 @@ elseif args.stats then
       return result
    end
 
+   local function in_potential_charging_state(state)
+      return state == 'Charging' or state == 'Full' or state == 'Unknown'
+   end
+
+   local function started_charge(current_battery_state, previous_battery_state)
+      return in_potential_charging_state(current_battery_state) and previous_battery_state == 'Discharging'
+   end
+
+   local function started_discharge(current_battery_state, previous_battery_state)
+      return current_battery_state == 'Discharging' and in_potential_charging_state(previous_battery_state)
+   end
+
+   local function integer_round(number) return math.floor(number + 0.5) end
+
    local log_file, log_file_err = io.open('/home/almgru/.local/share/batstat/BAT1.log', 'r')
 
    if not log_file then
@@ -46,7 +60,6 @@ elseif args.stats then
    end
 
    local prev_line
-   local charge_cycle = 0
    local discharge_durations = {}
    local sessions_duration = 0
    local session_start = {}
@@ -58,22 +71,20 @@ elseif args.stats then
       if prev_line ~= nil then
          local prev = parse_log_entry(prev_line)
 
-         if prev.status ~= 'Discharging' and curr.status == 'Discharging' then
-            charge_cycle = charge_cycle + 1
+         if started_discharge(curr.status, prev.status) then
             charge_cycle_start = curr
             sessions_duration = 0
             session_start = curr
-         elseif prev.status == 'Discharging' and curr.status ~= prev.status then
+         elseif started_charge(curr.status, prev.status) then
             if sessions_duration > 0 then
-               sessions_duration = sessions_duration +
-                   math.floor(((prev.timestamp - session_start.timestamp) / 60) + 0.5)
+               sessions_duration = sessions_duration + integer_round((prev.timestamp - session_start.timestamp) / 60)
                table.insert(discharge_durations, {
                   duration = sessions_duration,
                   capacity_delta = charge_cycle_start.capacity - prev.capacity
                })
             else
                table.insert(discharge_durations, {
-                  duration = math.floor(((prev.timestamp - charge_cycle_start.timestamp) / 60) + 0.5),
+                  duration = integer_round((prev.timestamp - charge_cycle_start.timestamp) / 60),
                   capacity_delta = charge_cycle_start.capacity - prev.capacity,
                })
             end
@@ -81,11 +92,10 @@ elseif args.stats then
             sessions_duration = 0
             session_start = curr
          elseif curr.timestamp - prev.timestamp > 180 then
-            sessions_duration = sessions_duration + math.floor(((prev.timestamp - session_start.timestamp) / 60) + 0.5)
+            sessions_duration = sessions_duration + integer_round((prev.timestamp - session_start.timestamp) / 60)
             session_start = curr
          end
       elseif curr.status == 'Discharging' then
-         charge_cycle = 1
          charge_cycle_start = curr
          session_start = curr
       end
