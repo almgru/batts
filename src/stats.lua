@@ -43,7 +43,7 @@ function stats.filter_out_outliers(data, z_scores)
    local filtered = {}
 
    for k, v in ipairs(data) do
-      if math.abs(z_scores[k]) < z_score_filter_threshold then table.insert(filtered, k, v) end
+      if math.abs(z_scores[k]) < z_score_filter_threshold then table.insert(filtered, #filtered + 1, v) end
    end
 
    return filtered
