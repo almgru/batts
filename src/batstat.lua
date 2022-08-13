@@ -50,12 +50,24 @@ elseif args.stats then
    local capacity_range_lower = func.map(battery_usage_summaries, function(summary)
       return summary.capacity_when_charging_started
    end)
+
    local capacity_range_upper = func.map(battery_usage_summaries, function(summary)
       return summary.capacity_when_charging_stopped
    end)
+
    local mean_capacity_range_lower = stats.mean(capacity_range_lower)
    local mean_capacity_range_upper = stats.mean(capacity_range_upper)
    local mean_capacity_range = string.format('%.0f%% - %.0f%%', mean_capacity_range_upper, mean_capacity_range_lower)
+
+   local power_draw = func.map(battery_usage_summaries, function(summary) return summary.power end)
+
+   for _, v1 in pairs(power_draw) do
+      if next(v1) ~= nil then
+         for _, v2 in pairs(v1) do
+            print(v2)
+         end
+      end
+   end
 
    local mean_duration_hours, mean_duration_minutes = date_utils.get_hours_and_minutes(mean_duration)
    local stddev_duration_hours, stddev_duration_minutes = date_utils.get_hours_and_minutes(stddev_durations)
@@ -71,7 +83,7 @@ elseif args.stats then
    print('extrapolated full charge discharge time: ' ..
       extrapolated_hours .. ' hours, ' .. extrapolated_minutes .. ' minutes')
    print('mean off-line capacity range: ' .. mean_capacity_range)
-   print('mean power draw: TODO')
+   print('mean power draw: N/A')
 
 elseif args.daemon then
    if args.log_directory == '$XDG_DATA_HOME/batstat' then

@@ -31,18 +31,23 @@ function daemon.start(sleep_interval_sec, battery_log_directory)
       for _, bat_dir in pairs(battery_directories) do
          local capacity_file, capacity_err = io.open(bat_dir .. '/capacity', 'r')
          local status_file, status_err = io.open(bat_dir .. '/status', 'r')
+         local power_file, power_err = io.open(bat_dir .. '/power_now', 'r')
 
          if not capacity_file then
             error(capacity_err)
          elseif not status_file then
             error(status_err)
+         elseif not power_file then
+            error(power_err)
          end
 
          local capacity = capacity_file:read('*n')
          local status = status_file:read('*l')
+         local power = power_file:read('*n')
 
          capacity_file:close()
          status_file:close()
+         power_file:close()
 
          local battery = basename(bat_dir)
          local battery_log_file, battery_log_err = io.open(battery_log_directory .. '/' .. battery .. '.log', 'a+')
@@ -52,7 +57,11 @@ function daemon.start(sleep_interval_sec, battery_log_directory)
          end
 
          local timestamp = os.date('%Y-%m-%d %H:%M:%S', os.time())
-         battery_log_file:write(timestamp .. ': ' .. battery .. ', ' .. status .. ', ' .. capacity .. '%' .. '\n')
+         local power_in_watts = power / 1000000
+         local log_entry = string.format('%s: %s, %s, %d%%, %.2f W\n',
+            timestamp, battery, status, capacity, power_in_watts)
+
+         battery_log_file:write(log_entry)
 
          battery_log_file:close()
       end
