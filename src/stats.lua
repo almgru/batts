@@ -1,5 +1,7 @@
 local stats = {}
 
+local z_score_filter_threshold = 10
+
 function stats.mean(data)
    local sum = 0
 
@@ -36,5 +38,17 @@ function stats.z_scores(data, mean, stddev)
 
    return z_scores
 end
+
+function stats.filter_out_outliers(data, z_scores)
+   local filtered = {}
+
+   for k, v in ipairs(data) do
+      if math.abs(z_scores[k]) < z_score_filter_threshold then table.insert(filtered, k, v) end
+   end
+
+   return filtered
+end
+
+stats.min_filter_population = 20
 
 return stats

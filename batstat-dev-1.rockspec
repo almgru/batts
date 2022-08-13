@@ -22,6 +22,9 @@ build = {
       daemon = 'src/daemon.lua',
       stats = 'src/stats.lua',
       battery_log_parser = 'src/battery_log_parser.lua',
+      func = 'src/func.lua',
+      date_utils = 'src/date_utils.lua',
+      math_utils = 'src/math_utils.lua',
    },
    install = {
       bin = {

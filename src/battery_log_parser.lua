@@ -1,18 +1,14 @@
-local battery_log_parser = {}
+local date_utils = require('date_utils')
+local math_utils = require('math_utils')
 
--- TODO: Move to module (maybe date-utils?)
-local function date_string_to_timestamp(date_string)
-   local pattern = '(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)'
-   local y, mo, d, h, mi, s = date_string:match(pattern)
-   return os.time({ year = y, month = mo, day = d, hour = h, min = mi, sec = s })
-end
+local battery_log_parser = {}
 
 local function parse_log_entry(log_line)
    local pattern = '(%d+-%d+-%d+ %d+:%d+:%d+): (BAT%d), (%a+), (%d+)%%'
    local date_string, name, status, capacity = log_line:match(pattern)
 
    return {
-      timestamp = date_string_to_timestamp(date_string),
+      timestamp = date_utils.date_string_to_timestamp(date_string),
       name = name,
       status = status,
       capacity = capacity,
@@ -31,13 +27,9 @@ local function started_discharge(current_battery_state, previous_battery_state)
    return current_battery_state == 'Discharging' and in_potential_charging_state(previous_battery_state)
 end
 
---
--- TODO: Move to module (maybe math-util?)
-local function integer_round(number) return math.floor(number + 0.5) end
-
 function battery_log_parser.parse(log_file)
    local prev_line
-   local discharge_durations = {}
+   local battery_usage_summaries = {}
    local sessions_duration = 0
    local session_start = {}
    local charge_cycle_start
@@ -54,14 +46,15 @@ function battery_log_parser.parse(log_file)
             session_start = curr
          elseif started_charge(curr.status, prev.status) then
             if sessions_duration > 0 then
-               sessions_duration = sessions_duration + integer_round((prev.timestamp - session_start.timestamp) / 60)
-               table.insert(discharge_durations, {
+               sessions_duration = sessions_duration +
+                   math_utils.integer_round((prev.timestamp - session_start.timestamp) / 60)
+               table.insert(battery_usage_summaries, {
                   duration = sessions_duration,
                   capacity_delta = charge_cycle_start.capacity - prev.capacity
                })
             else
-               table.insert(discharge_durations, {
-                  duration = integer_round((prev.timestamp - charge_cycle_start.timestamp) / 60),
+               table.insert(battery_usage_summaries, {
+                  duration = math_utils.integer_round((prev.timestamp - charge_cycle_start.timestamp) / 60),
                   capacity_delta = charge_cycle_start.capacity - prev.capacity,
                })
             end
@@ -69,7 +62,8 @@ function battery_log_parser.parse(log_file)
             sessions_duration = 0
             session_start = curr
          elseif curr.timestamp - prev.timestamp > 180 then
-            sessions_duration = sessions_duration + integer_round((prev.timestamp - session_start.timestamp) / 60)
+            sessions_duration = sessions_duration +
+                math_utils.integer_round((prev.timestamp - session_start.timestamp) / 60)
             session_start = curr
          end
       elseif curr.status == 'Discharging' then
@@ -80,7 +74,7 @@ function battery_log_parser.parse(log_file)
       prev_line = line
    end
 
-   return discharge_durations
+   return battery_usage_summaries
 end
 
 return battery_log_parser
