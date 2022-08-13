@@ -71,6 +71,7 @@ elseif args.stats then
    print('extrapolated full charge discharge time: ' ..
       extrapolated_hours .. ' hours, ' .. extrapolated_minutes .. ' minutes')
    print('mean off-line capacity range: ' .. mean_capacity_range)
+   print('mean power draw: TODO')
 
 elseif args.daemon then
    if args.log_directory == '$XDG_DATA_HOME/batstat' then
