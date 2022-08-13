@@ -50,12 +50,14 @@ function battery_log_parser.parse(log_file)
                    math_utils.integer_round((prev.timestamp - session_start.timestamp) / 60)
                table.insert(battery_usage_summaries, {
                   duration = sessions_duration,
-                  capacity_delta = charge_cycle_start.capacity - prev.capacity
+                  capacity_when_charging_started = prev.capacity,
+                  capacity_when_charging_stopped = charge_cycle_start.capacity,
                })
             else
                table.insert(battery_usage_summaries, {
                   duration = math_utils.integer_round((prev.timestamp - charge_cycle_start.timestamp) / 60),
-                  capacity_delta = charge_cycle_start.capacity - prev.capacity,
+                  capacity_when_charging_started = prev.capacity,
+                  capacity_when_charging_stopped = charge_cycle_start.capacity,
                })
             end
 

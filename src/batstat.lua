@@ -31,8 +31,8 @@ elseif args.stats then
       stddev_durations = stats.standard_deviation(durations)
    end
 
-   local capacity_drain_per_minute = func.map(battery_usage_summaries, function(duration)
-      return duration.capacity_delta / duration.duration
+   local capacity_drain_per_minute = func.map(battery_usage_summaries, function(summary)
+      return (summary.capacity_when_charging_started - summary.capacity_when_charging_stopped) / summary.duration
    end)
 
    local mean_drain_per_minute = stats.mean(capacity_drain_per_minute)
@@ -47,19 +47,30 @@ elseif args.stats then
       stddev_drain_per_minute = stats.standard_deviation(capacity_drain_per_minute)
    end
 
+   local capacity_range_lower = func.map(battery_usage_summaries, function(summary)
+      return summary.capacity_when_charging_started
+   end)
+   local capacity_range_upper = func.map(battery_usage_summaries, function(summary)
+      return summary.capacity_when_charging_stopped
+   end)
+   local mean_capacity_range_lower = stats.mean(capacity_range_lower)
+   local mean_capacity_range_upper = stats.mean(capacity_range_upper)
+   local mean_capacity_range = string.format('%.0f%% - %.0f%%', mean_capacity_range_upper, mean_capacity_range_lower)
+
    local mean_duration_hours, mean_duration_minutes = date_utils.get_hours_and_minutes(mean_duration)
    local stddev_duration_hours, stddev_duration_minutes = date_utils.get_hours_and_minutes(stddev_durations)
    local mean_discharge_rate = mean_drain_per_minute * 60
    local stddev_discharge_rate = stddev_drain_per_minute * 60
-   local extrapolated_hours, extrapolated_minutes = date_utils.get_hours_and_minutes(100 / mean_drain_per_minute)
+   local extrapolated_full_discharge_time = 100 / math.abs(mean_drain_per_minute)
+   local extrapolated_hours, extrapolated_minutes = date_utils.get_hours_and_minutes(extrapolated_full_discharge_time)
 
-   print('TODO: Add average capacity range. For example: 60% - 40%.')
    print('mean discharge time: ' .. mean_duration_hours .. 'h ' .. mean_duration_minutes .. 'm (σ ' ..
       stddev_duration_hours .. 'h ' .. stddev_duration_minutes .. 'm)')
    print('mean discharge rate per hour: ' .. string.format('%.2f', mean_discharge_rate) .. '% (σ ' ..
       string.format('%.2f', stddev_discharge_rate) .. '%)')
    print('extrapolated full charge discharge time: ' ..
       extrapolated_hours .. ' hours, ' .. extrapolated_minutes .. ' minutes')
+   print('mean off-line capacity range: ' .. mean_capacity_range)
 
 elseif args.daemon then
    if args.log_directory == '$XDG_DATA_HOME/batstat' then
