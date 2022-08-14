@@ -3,7 +3,7 @@ Description=batstat daemon
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/env batstat daemon --interval-in-seconds=60 --log-directory=$XDG_DATA_HOME/batstat
+ExecStart=batstat daemon --interval-in-seconds=60 --log-directory=$XDG_DATA_HOME/batstat
 
 [Install]
 WantedBy=default.target

@@ -20,7 +20,7 @@ batstat-${VERSION}.tar.xz: batstat-${VERSION}.tar
 batstat-${VERSION}.tar: batstat-${VERSION}/
 	tar -c -f $@ $<
 
-batstat-${VERSION}/: bin/batstat
+batstat-${VERSION}/: bin/batstat service/systemd/batstat-daemon.service
 	rm -rf $@
 	mkdir -p $@
 	cp -r bin/batstat service README.md LICENSE.txt CHANGELOG.md $@
