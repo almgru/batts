@@ -3,7 +3,9 @@
 /lua_modules
 /.luarocks
 /dist
+*.tar
 *.tar.gz
+*.tar.xz
 .direnv/
 build/
 ext/

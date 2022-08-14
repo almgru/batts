@@ -13,6 +13,7 @@
                     pkgs.musl
                     pkgs.zig
                     pkgs.pkgsStatic.libunwind
+                    pkgs.xz
                 ];
             };
         };

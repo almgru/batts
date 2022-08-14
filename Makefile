@@ -1,17 +1,24 @@
 CC = musl-gcc
-CFLAGS =
+CFLAGS = -O2 -s
+VERSION=dev-1
 
 sources := $(shell find src -name '*.lua')
 luajit_path := $(shell readlink -f "$$(dirname "$$(which luajit)")"/..)
 libunwind_path := $(shell find / -path '*/lib/*' -name 'libunwind.a' -print -quit 2>/dev/null)
 
 .PHONY: all
-all: bin/batstat
+all: batstat-${VERSION}.tar.xz
 
 .PHONY: clean
 clean:
 	./luarocks purge --tree lua_modules >/dev/null
-	rm -rf bin build obj ext
+	rm -rf bin build obj ext batstat-*.tar batstat-*.tar.xz
+
+batstat-${VERSION}.tar.xz: batstat-${VERSION}.tar
+	xz --keep --best --force $<
+
+batstat-${VERSION}.tar: bin/batstat
+	tar -c -f $@ bin service
 
 bin/batstat: obj/lua_signal.o obj/sleep.o $(sources) | luarocks_deps build/ bin/
 	cp ${sources} build/
