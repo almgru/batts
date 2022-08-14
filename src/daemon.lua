@@ -6,15 +6,14 @@ local daemon = {}
 local function get_battery_directories()
     local bat_dirs = {}
 
-    local find, err = io.popen('/usr/bin/find /sys/class/power_supply -maxdepth 1 -name "BAT*" -print0')
+    local find, err = io.popen('/usr/bin/find /sys/class/power_supply -maxdepth 1 -name "BAT*"')
     if not find then error(err) end
 
-    local file_list = find:read('*a')
-    find:close()
-
-    for file in file_list:gmatch('[^\\0]+') do
+    for file in find:lines() do
         table.insert(bat_dirs, file)
     end
+
+    find:close()
 
     return bat_dirs
 end
