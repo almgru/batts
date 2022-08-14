@@ -5,3 +5,7 @@
 /dist
 *.tar.gz
 .direnv/
+build/
+ext/
+obj/
+bin/

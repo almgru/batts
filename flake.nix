@@ -10,6 +10,9 @@
                     pkgs.shellcheck
                     pkgs.luajitPackages.luarocks
                     pkgs.sumneko-lua-language-server
+                    pkgs.musl
+                    pkgs.zig
+                    pkgs.pkgsStatic.libunwind
                 ];
             };
         };
