@@ -6,12 +6,15 @@ local daemon = {}
 local function get_battery_directories()
     local bat_dirs = {}
 
-    -- TODO: Fix so dependency on luaposix can be removed
-    --for _, file in pairs(glob('/sys/class/power_supply/BAT*', 0)) do
-    --   table.insert(bat_dirs, file)
-    --end
+    local find, err = io.popen('/usr/bin/find /sys/class/power_supply -maxdepth 1 -name "BAT*" -print0')
+    if not find then error(err) end
 
-    table.insert(bat_dirs, '/sys/class/power_supply/BAT1')
+    local file_list = find:read('*a')
+    find:close()
+
+    for file in file_list:gmatch('[^\\0]+') do
+        table.insert(bat_dirs, file)
+    end
 
     return bat_dirs
 end
