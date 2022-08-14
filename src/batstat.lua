@@ -1,3 +1,5 @@
+local inspect = require('inspect')
+
 local cli_parser = require('cli_parser')
 local daemon = require('daemon')
 local stats = require('stats')
@@ -59,15 +61,12 @@ elseif args.stats then
    local mean_capacity_range_upper = stats.mean(capacity_range_upper)
    local mean_capacity_range = string.format('%.0f%% - %.0f%%', mean_capacity_range_upper, mean_capacity_range_lower)
 
-   local power_draw = func.map(battery_usage_summaries, function(summary) return summary.power end)
+   local power_draw = func.reduce(battery_usage_summaries, {}, function(acc, el)
+      for _, v in ipairs(el.power) do table.insert(acc, v) end
 
-   for _, v1 in pairs(power_draw) do
-      if next(v1) ~= nil then
-         for _, v2 in pairs(v1) do
-            print(v2)
-         end
-      end
-   end
+      return acc
+   end)
+   local mean_power_draw = stats.mean(power_draw)
 
    local mean_duration_hours, mean_duration_minutes = date_utils.get_hours_and_minutes(mean_duration)
    local stddev_duration_hours, stddev_duration_minutes = date_utils.get_hours_and_minutes(stddev_durations)
@@ -83,7 +82,7 @@ elseif args.stats then
    print('extrapolated full charge discharge time: ' ..
       extrapolated_hours .. ' hours, ' .. extrapolated_minutes .. ' minutes')
    print('mean off-line capacity range: ' .. mean_capacity_range)
-   print('mean power draw: N/A')
+   print('mean off-line power draw: ' .. string.format('%.2f W', mean_power_draw))
 
 elseif args.daemon then
    if args.log_directory == '$XDG_DATA_HOME/batstat' then
