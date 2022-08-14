@@ -1,0 +1,40 @@
+MIT License
+
+Copyright (c) 2022 Daniel Alm Grundström
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+This product bundles LuaJIT 2.1.0, which is available under a "MIT" license. For details, see
+https://luajit.org/luajit.html.
+
+This product bundles musl 1.2.3, which is available under a "MIT" license. For details, see
+https://musl.libc.org/about.html.
+
+This product bundles argparse 0.7.1, which is available under a "MIT" license. For details, see
+https://github.com/mpeterv/argparse/blob/412e6aca393e365f92c0315dfe50181b193f1ace/LICENSE.
+
+This product bundles sleep 1.0.0, which is available under an "Unlicense" license. For details, see
+https://github.com/squeek502/sleep/blob/1e03a83e98cc38b6cdbdf72d440b1ddacf88ff6e/LICENSE.
+
+This product bundles lua-signal 1.2.0, which is available under a "MIT" license. For details, see
+https://github.com/batrick/lua-signal/blob/1483e0f252ddf845a455a749327b8523a228b17b/LICENSE.
+
+This product bundles libunwind 1.6.2, which is available under a
+"MIT" license. For details, see
+https://github.com/libunwind/libunwind/blob/b3ca1b59a795a617877c01fe5d299ab7a07ff29d/LICENSE.

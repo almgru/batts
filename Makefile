@@ -1,5 +1,5 @@
 CC = musl-gcc
-CFLAGS = -O2 -s
+CFLAGS = -O2
 VERSION=dev-1
 
 sources := $(shell find src -name '*.lua')
@@ -17,8 +17,13 @@ clean:
 batstat-${VERSION}.tar.xz: batstat-${VERSION}.tar
 	xz --keep --best --force $<
 
-batstat-${VERSION}.tar: bin/batstat
-	tar -c -f $@ bin service
+batstat-${VERSION}.tar: batstat-${VERSION}/
+	tar -c -f $@ $<
+
+batstat-${VERSION}/: bin/batstat
+	rm -rf $@
+	mkdir -p $@
+	cp -r bin/batstat service README.md LICENSE.txt CHANGELOG.md $@
 
 bin/batstat: obj/lua_signal.o obj/sleep.o $(sources) | luarocks_deps build/ bin/
 	cp ${sources} build/

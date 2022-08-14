@@ -11,3 +11,4 @@ build/
 ext/
 obj/
 bin/
+batstat-*/
