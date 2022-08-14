@@ -1,3 +1,4 @@
+rockspec_format = '3.0'
 package = 'batstat'
 version = 'dev-1'
 source = {
@@ -16,6 +17,12 @@ dependencies = {
     'sleep >= 1.0.0-4',
     'lua_signal >= 1.2.0-1',
     'luastatic >= 0.0.12-1',
+}
+test_dependencies = {
+    'busted >= 2.0.0-1',
+}
+test = {
+    type = 'busted'
 }
 build = {
     type = 'builtin',
