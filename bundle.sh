@@ -19,7 +19,11 @@ get_script_path() {
 
 script_path="\$(get_script_path)"
 
-LUA_PATH="\$script_path/lua_modules/share/lua/5.1/?.lua;\$script_path/lua_modules/share/lua/5.1/?/init.lua" LUA_CPATH="\$script_path/lua_modules/lib/lua/5.1/?.so;\$script_path/lua_modules/lib/lua/5.1/posix/?.so;\$script_path/lua_modules/lib/lua/5.1/posix/sys/?.so" exec /usr/bin/luajit "\$script_path"/lua_modules/lib/luarocks/rocks-5.1/batstat/dev-1/bin/batstat "\$@"
+LUA_PATH="\$script_path/lua_modules/share/lua/5.1/?.lua;\$script_path/lua_modules/share/lua/5.1/?/init.lua" LUA_CPATH="\$script_path/lua_modules/lib/lua/5.1/?.so;\$script_path/lua_modules/lib/lua/5.1/posix/?.so;\$script_path/lua_modules/lib/lua/5.1/posix/sys/?.so" exec /usr/bin/luajit "\$script_path"/lua_modules/lib/luarocks/rocks-5.1/batstat/dev-1/bin/batstat "\$@" &
+pid=\$!
+
+trap "kill \$pid" INT TERM
+wait \$pid
 EOF
 
 chmod +x dist/batstat-"$VERSION"/batstat
