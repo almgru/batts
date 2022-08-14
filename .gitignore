@@ -4,3 +4,4 @@
 /.luarocks
 /dist
 *.tar.gz
+.direnv/
