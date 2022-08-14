@@ -2,18 +2,20 @@
     inputs.nixpkgs.url = github:NixOS/nixpkgs/nixpkgs-unstable;
 
     outputs = { self, nixpkgs }:
-        let pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        let
+            system = "x86_64-linux";
+            pkgs = nixpkgs.legacyPackages.${system};
         in {
-            devShell.x86_64-linux = pkgs.mkShell {
+            devShell.${system} = pkgs.mkShell {
                 buildInputs = [
                     pkgs.luajit
-                    pkgs.shellcheck
                     pkgs.luajitPackages.luarocks
-                    pkgs.sumneko-lua-language-server
                     pkgs.musl
                     pkgs.zig
                     pkgs.pkgsStatic.libunwind
                     pkgs.xz
+                    pkgs.shellcheck
+                    pkgs.sumneko-lua-language-server
                 ];
             };
         };
