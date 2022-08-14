@@ -1,5 +1,3 @@
-local inspect = require('inspect')
-
 local func = {}
 
 function func.map(t, selector)

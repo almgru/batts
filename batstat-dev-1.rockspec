@@ -1,4 +1,3 @@
-rockspec_format = '3.0'
 package = 'batstat'
 version = 'dev-1'
 source = {
@@ -15,12 +14,6 @@ dependencies = {
    'lua ~> 5.1',
    'argparse >= 0.7.1-1',
    'luaposix >= 35.1-1',
-}
-test_dependencies = {
-   'busted >= 2.0.0-1',
-}
-test = {
-   type = 'busted'
 }
 build = {
    type = 'builtin',

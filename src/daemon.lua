@@ -8,6 +8,7 @@ local daemon = {}
 local function get_battery_directories()
    local bat_dirs = {}
 
+   -- TODO: Fix so dependency on luaposix can be removed
    for _, file in pairs(glob('/sys/class/power_supply/BAT*', 0)) do
       table.insert(bat_dirs, file)
    end
@@ -24,6 +25,7 @@ function daemon.start(sleep_interval_sec, battery_log_directory)
       stop = true
    end
 
+   -- TODO: Find smaller library, that can be easily statically compiled, to handle signals
    signal.signal(signal.SIGINT, handler)
    signal.signal(signal.SIGTERM, handler)
 
@@ -49,7 +51,7 @@ function daemon.start(sleep_interval_sec, battery_log_directory)
          status_file:close()
          power_file:close()
 
-         local battery = basename(bat_dir)
+         local battery = basename(bat_dir) -- TODO: Use string manipulation instead so dep on luaposix can be removed
          local battery_log_file, battery_log_err = io.open(battery_log_directory .. '/' .. battery .. '.log', 'a+')
 
          if not battery_log_file then
@@ -66,6 +68,7 @@ function daemon.start(sleep_interval_sec, battery_log_directory)
          battery_log_file:close()
       end
 
+      -- TODO: Find smaller library, that can be easily statically compiled, to handle sleep
       sleep(sleep_interval_sec)
    until stop
 end

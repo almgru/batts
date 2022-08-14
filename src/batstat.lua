@@ -1,5 +1,3 @@
-local inspect = require('inspect')
-
 local cli_parser = require('cli_parser')
 local daemon = require('daemon')
 local stats = require('stats')
