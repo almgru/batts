@@ -4,7 +4,7 @@ Description=batstat daemon
 [Service]
 Type=simple
 ExecStart=batstat daemon --interval-in-seconds=60 --log-directory=$XDG_DATA_HOME/batstat
-ExecStop=killall --process-group $MAINPID --user --wait batstat
+ExecStop=killall --user --wait batstat
 
 [Install]
 WantedBy=default.target
