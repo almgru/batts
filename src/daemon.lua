@@ -22,9 +22,14 @@ local battery_directories = get_battery_directories()
 
 function daemon.start(sleep_interval_sec, battery_log_directory)
     local stop = false
+    local sleeping = false
 
-    signal('SIGINT', function() stop = true end)
-    signal('SIGTERM', function() stop = true end)
+    local function handler()
+        if sleeping then os.exit(0) else stop = true end
+    end
+
+    signal('SIGINT', handler)
+    signal('SIGTERM', handler)
 
     repeat
         for _, bat_dir in pairs(battery_directories) do
@@ -65,7 +70,9 @@ function daemon.start(sleep_interval_sec, battery_log_directory)
             battery_log_file:close()
         end
 
+        sleeping = true
         sleep(sleep_interval_sec * 1000)
+        sleeping = false
     until stop
 end
 
