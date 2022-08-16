@@ -1,6 +1,9 @@
 # batstat
 
-Track and display statistics about battery usage, like charge cycles and average time between charges.
+Simple Linux utility to track and display statistics about battery usage, like average time to discharge, average
+power draw or charge cycles used.
+
+Distributed as a static musl binary, so should work on any x86\_64 Linux distribution.
 
 ## Installing
 
@@ -36,8 +39,9 @@ by a service supervisor or in your `~/.profile` equivalent.
 
 ### `daemon` Options
 
-- __`-l <dir>, --log-directory <dir>`__: directory to save battery log file to. Defaults to `~/.local/share/batstat`.
-- __`-i <num>, --interval-in-seconds <num>`__: number of seconds to wait before each log entry. Default to `60`.
+- __`-l <dir>`__ or __`--log-directory <dir>`__: directory to save battery log file to. Defaults to
+`~/.local/share/batstat`.
+- __`-i <num>`__ or __`--interval-in-seconds <num>`__: number of seconds to wait before each log entry. Default to `60`.
 
 ## Development
 
@@ -59,6 +63,9 @@ To automatically enter the dev shell when entering the repo directory:
 
 1. Install direnv
 2. `~/repos/batstat $ echo "use flake" >> .envrc`
+
+__NOTE:__ There are two dev shells availabe. The default dev shell described here, and one shell for building the
+static binary release. If you need to debug the build of the static binary, use that one instead.
 
 #### Manual
 
@@ -88,9 +95,9 @@ To automatically enter the dev shell when entering the repo directory:
 #### Using nix
 
 1. [Enable flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes) in nix.
-2. Build with:
+2. Build with
    ```bash
-   ~/repos/batstat $ nix develop .#release -c make
+   ~/repos/batstat $ nix develop '.#release' -c make
    ```
 
 #### Manual (Not recommended)
@@ -103,5 +110,8 @@ To automatically enter the dev shell when entering the repo directory:
    - zig >= 0.9.1
    - xz >= 5.2.5
 2. Compile a static version of libunwind 1.6.2
-3. `make`
+3. Build:
+   ```bash
+   ~/repos/batstat $ make
+   ```
 
