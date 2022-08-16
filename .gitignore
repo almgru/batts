@@ -7,6 +7,7 @@
 *.tar.gz
 *.tar.xz
 .direnv/
+.envrc
 build/
 ext/
 obj/
