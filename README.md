@@ -4,33 +4,40 @@ Track and display statistics about battery usage, like charge cycles and average
 
 ## Installing
 
-TODO
+1. Download the latest archive from the releases page.
+2. Extract the archive and copy the `batstat` binary to somewhere in your `$PATH`.
+
+### Starting the daemon
+
+A systemd service file is provided in the release archive. See below for installing it.
+
+If you can't or don't want to use systemd, you can just start the daemon in your `~/.profile`, `~/.bash_profile`,
+`~/.zprofile` or `.config/fish/config.fish`:
+
+```bash
+batstat daemon &
+```
+
+#### Using systemd user (optional)
+
+1. Copy `service/systemd/batstat-daemon.service` from the archive to `~/.config/systemd/user/batstat-daemon.service`.
+2. Start the service:
+   ```bash
+   $ systemctl --user enable --now batstat-daemon
+   ```
 
 ## Usage
 
-TODO
+To see statistics about battery use, run `batstat stats`. Note that some stats will not be available until the daemon
+has run for a while.
 
-## Building static binary
+To start the daemon, run `batstat daemon`. Note that the daemon runs in the foreground as it's intended to be started
+by a service supervisor or in your `~/.profile` equivalent.
 
-### Using nix
+### `daemon` Options
 
-1. [Enable flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes) in nix.
-2. Build with:
-   ```bash
-   ~/repos/batstat $ nix develop .#release -c make
-   ```
-
-### Manual (Not recommended)
-
-1. Install the following dependencies using your distro's package manager:
-   - make >= 4.3
-   - luajit >= 2.1.0
-   - luarocks >= 3.9.0
-   - musl >= 1.2.3
-   - zig >= 0.9.1
-   - xz >= 5.2.5
-2. Compile a static version of libunwind 1.6.2
-3. `make`
+- __`-l <dir>, --log-directory <dir>`__: directory to save battery log file to. Defaults to `~/.local/share/batstat`.
+- __`-i <num>, --interval-in-seconds <num>`__: number of seconds to wait before each log entry. Default to `60`.
 
 ## Development
 
@@ -75,4 +82,26 @@ To automatically enter the dev shell when entering the repo directory:
 ### Running tests
 
 1. `./luarocks test`
+
+### Building static binary
+
+#### Using nix
+
+1. [Enable flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes) in nix.
+2. Build with:
+   ```bash
+   ~/repos/batstat $ nix develop .#release -c make
+   ```
+
+#### Manual (Not recommended)
+
+1. Install the following dependencies using your distro's package manager:
+   - make >= 4.3
+   - luajit >= 2.1.0
+   - luarocks >= 3.9.0
+   - musl >= 1.2.3
+   - zig >= 0.9.1
+   - xz >= 5.2.5
+2. Compile a static version of libunwind 1.6.2
+3. `make`
 
