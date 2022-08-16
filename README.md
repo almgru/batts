@@ -3,7 +3,7 @@
 Simple Linux utility to track and display statistics about battery usage, like average time to discharge, average
 power draw or charge cycles used.
 
-Distributed as a static musl binary, so should work on any x86\_64 Linux distribution.
+Distributed as a static musl binary, so should work on any x86\_64 or aarch64 Linux distribution.
 
 ## Installing
 
