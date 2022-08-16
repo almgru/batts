@@ -122,19 +122,6 @@ static binary release. If you need to debug the build of the static binary, use 
 
 \*Currently supports armv7a, aarch64, x86 and x86\_64.
 
-1. Install `qemu-system-aarch64`.
-2. Enable [qemu-user-static](https://github.com/multiarch/qemu-user-static):
-
-   With docker: `docker run --rm --privileged multiarch/qemu-user-static --reset -p yes`
-
-   With podman: `sudo podman run --rm --privileged multiarch/qemu-user-static --reset -p yes`
-3. Add the following to `/etc/nix/nix.conf`:
-   ```
-   extra-platforms = aarch64-linux
-   extra-sandbox-paths = /usr/bin/qemu-system-aarch64
-   ```
-4. Restart the nix daemon. For example with systemd: `sudo systemctl restart nix-daemon`
-
 To compile for armv7a, run:
 ```bash
 ~/repos/batstat $ nix develop '.#release' -c make TARGET=arm-linux-musleabihf
