@@ -11,7 +11,6 @@
                     packages = [
                         pkgs.luajit
                         pkgs.luajitPackages.luarocks
-                        pkgs.shellcheck
                         pkgs.sumneko-lua-language-server
                     ];
                 };
