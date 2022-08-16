@@ -70,9 +70,11 @@ function daemon.start(sleep_interval_sec, battery_log_directory)
             battery_log_file:close()
         end
 
-        sleeping = true
-        sleep(sleep_interval_sec * 1000)
-        sleeping = false
+        if not stop then
+            sleeping = true
+            sleep(sleep_interval_sec * 1000)
+            sleeping = false
+        end
     until stop
 end
 
