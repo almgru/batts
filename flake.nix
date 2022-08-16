@@ -9,9 +9,7 @@
 
         eachSystem [
             system.x86_64-linux
-            system.i686-linux
             system.aarch64-linux
-            system.armv7l-linux
         ] (system:
             let pkgs = nixpkgs.legacyPackages.${system};
             in {

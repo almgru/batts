@@ -118,3 +118,22 @@ static binary release. If you need to debug the build of the static binary, use 
    ~/repos/batstat $ make
    ```
 
+### Compiling for other platforms
+
+\*Currently only supports aarch64.
+
+1. Install `qemu-system-aarch64`.
+2. Enable [qemu-user-static](https://github.com/multiarch/qemu-user-static):
+   With docker: `docker run --rm --privileged multiarch/qemu-user-static --reset -p yes`
+   With podman: `sudo podman run --rm --privileged multiarch/qemu-user-static --reset -p yes`
+3. Add the following to `/etc/nix/nix.conf`:
+   ```
+   extra-platforms = aarch64-linux
+   extra-sandbox-paths = /usr/bin/qemu-system-aarch64
+   ```
+4. Restart the nix daemon. For example with systemd: `sudo systemctl restart nix-daemon`
+5. To compile for aarch64, run:
+```bash
+~/repos/batstat $ nix develop '.#devShells.aarch64-linux.release' -c make TARGET=aarch64-linux
+```
+

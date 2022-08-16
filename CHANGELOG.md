@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1] - 2022-08-16
+
+Multiarch support.
+
+### Added
+
+- Adds support for ARMv8.
+
+### Fixed
+
+- Issue that caused `systemctl stop batstat-daemon` to occasionally timeout.
+
 ## [0.1.0] - 2022-08-16
 
 Initial release.
