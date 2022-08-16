@@ -25,7 +25,8 @@ batstat-${TARGET}-${VERSION}.tar: batstat-${TARGET}-${VERSION}/
 batstat-${TARGET}-${VERSION}/: bin/batstat-${TARGET} service/systemd/batstat-daemon.service
 	rm -rf $@
 	mkdir -p $@
-	cp -r bin/batstat-${TARGET} service README.md LICENSE.txt CHANGELOG.md $@
+	cp -r service README.md LICENSE.txt CHANGELOG.md $@
+	cp bin/batstat-${TARGET} $@/batstat
 
 bin/batstat-${TARGET}: obj/lua_signal-${TARGET}.o obj/sleep-${TARGET}.o $(sources) lua_modules/share/lua/5.1/argparse.lua lua_modules/bin/luastatic | build/ bin/
 	cp ${sources} build/
