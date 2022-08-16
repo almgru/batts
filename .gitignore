@@ -10,6 +10,6 @@
 .envrc
 build/
 ext/
-obj/
+lib/
 bin/
 batstat-*/

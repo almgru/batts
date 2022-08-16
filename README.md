@@ -3,7 +3,7 @@
 Simple Linux utility to track and display statistics about battery usage, like average time to discharge, average
 power draw or charge cycles used.
 
-Distributed as a static musl binary, so should work on any x86\_64 or aarch64 Linux distribution.
+Distributed as a static musl binary, so should work on any x86, x86\_64, armv7a or aarch64 Linux distribution.
 
 ## Installing
 
@@ -118,15 +118,15 @@ static binary release. If you need to debug the build of the static binary, use 
    ~/repos/batstat $ make
    ```
 
-### Compiling for other platforms
+### Cross-compilation
 
-\*Currently only supports aarch64.
+\*Currently supports armv7a, aarch64, x86 and x86\_64.
 
 1. Install `qemu-system-aarch64`.
 2. Enable [qemu-user-static](https://github.com/multiarch/qemu-user-static):
 
    With docker: `docker run --rm --privileged multiarch/qemu-user-static --reset -p yes`
-   
+
    With podman: `sudo podman run --rm --privileged multiarch/qemu-user-static --reset -p yes`
 3. Add the following to `/etc/nix/nix.conf`:
    ```
@@ -134,8 +134,23 @@ static binary release. If you need to debug the build of the static binary, use 
    extra-sandbox-paths = /usr/bin/qemu-system-aarch64
    ```
 4. Restart the nix daemon. For example with systemd: `sudo systemctl restart nix-daemon`
-5. To compile for aarch64, run:
+
+To compile for armv7a, run:
 ```bash
-~/repos/batstat $ nix develop '.#devShells.aarch64-linux.release' -c make TARGET=aarch64-linux
+~/repos/batstat $ nix develop '.#release' -c make TARGET=arm-linux-musleabihf
 ```
 
+To compile for aarch64, run:
+```bash
+~/repos/batstat $ nix develop '.#release' -c make TARGET=aarch64-linux-musl
+```
+
+To compile for x86, run:
+```bash
+~/repos/batstat $ nix develop '.#release' -c make TARGET=i386-linux-musl
+```
+
+To compile for x86\_64, run:
+```bash
+~/repos/batstat $ nix develop '.#release' -c make TARGET=x86_64-linux-musl
+```

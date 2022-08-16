@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.2] - 2022-08-16
+
+Adds support for x86 and armv7a.
+
+### Added
+
+- Support for 32-bit x86.
+- Support for 32-bit armv7.
+
 ## [0.1.1] - 2022-08-16
 
 Multiarch support.
