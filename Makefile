@@ -25,7 +25,7 @@ batstat-${VERSION}/: bin/batstat service/systemd/batstat-daemon.service
 	mkdir -p $@
 	cp -r bin/batstat service README.md LICENSE.txt CHANGELOG.md $@
 
-bin/batstat: obj/lua_signal.o obj/sleep.o $(sources) | luarocks_deps build/ bin/
+bin/batstat: obj/lua_signal.o obj/sleep.o $(sources) lua_modules/share/lua/5.1/argparse.lua lua_modules/bin/luastatic | build/ bin/
 	cp ${sources} build/
 	cp lua_modules/share/lua/5.1/argparse.lua build/
 	cp obj/lua_signal.o obj/sleep.o build/
@@ -39,7 +39,7 @@ bin/batstat: obj/lua_signal.o obj/sleep.o $(sources) | luarocks_deps build/ bin/
 	   -I${luajit_path}/include \
 	   -L${libunwind_path}/lib/libunwind -lunwind \
 	   -lm -lpthread -ldl
-	mv build/batstat bin/batstat
+	cp build/batstat bin/batstat
 
 obj/lua_signal.o: ext/lua_signal/lsignal.c | obj/
 	make --directory=ext/lua_signal CC="$(CC)" CFLAGS="${CFLAGS} -c -static -I${luajit_path}/include"
@@ -48,8 +48,7 @@ obj/lua_signal.o: ext/lua_signal/lsignal.c | obj/
 obj/sleep.o: ext/sleep/sleep.c | obj/
 	$(CC) ${CFLAGS} -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
 
-.PHONY: luarocks_deps
-luarocks_deps:
+lua_modules/%:
 	./luarocks build --only-deps >/dev/null
 
 ext/lua_signal/lsignal.c: | ext/download/lua_signal
