@@ -37,10 +37,13 @@ has run for a while.
 To start the daemon, run `batstat daemon`. Note that the daemon runs in the foreground as it's intended to be started
 by a service supervisor or in your `~/.profile` equivalent.
 
-### `daemon` Options
+### Global options
 
 - __`-l <dir>`__ or __`--log-directory <dir>`__: directory to save battery log file to. Defaults to
 `~/.local/share/batstat`.
+
+### `daemon` options
+
 - __`-i <num>`__ or __`--interval-in-seconds <num>`__: number of seconds to wait before each log entry. Default to `60`.
 
 ## Development
