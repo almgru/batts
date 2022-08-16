@@ -1,6 +1,7 @@
-CC = musl-gcc
+CC = zig cc
 CFLAGS = -O2
-VERSION=dev-1
+VERSION = dev-1
+TARGET = x86_64-linux-musl
 
 sources := $(shell find src -name '*.lua')
 luajit_path := $(shell readlink -f "$$(dirname "$$(which luajit)")"/..)
@@ -29,24 +30,24 @@ bin/batstat: obj/lua_signal.o obj/sleep.o $(sources) lua_modules/share/lua/5.1/a
 	cp ${sources} build/
 	cp lua_modules/share/lua/5.1/argparse.lua build/
 	cp obj/lua_signal.o obj/sleep.o build/
-	cd build && CC="zig cc" ../lua_modules/bin/luastatic \
+	cd build && CC="${CC}" ../lua_modules/bin/luastatic \
 	   batstat.lua \
 	   cli_parser.lua daemon.lua date_utils.lua func.lua math_utils.lua stats.lua battery_log_parser.lua \
 	   argparse.lua \
 	   lua_signal.o sleep.o \
 	   ${luajit_path}/lib/libluajit-5.1.a \
-	   -target x86_64-linux-musl -static -Bstatic ${CFLAGS} \
+	   -target ${TARGET} -static -Bstatic ${CFLAGS} \
 	   -I${luajit_path}/include \
 	   -L${libunwind_path}/lib/libunwind -lunwind \
 	   -lm -lpthread -ldl
 	cp build/batstat bin/batstat
 
 obj/lua_signal.o: ext/lua_signal/lsignal.c | obj/
-	make --directory=ext/lua_signal CC="$(CC)" CFLAGS="${CFLAGS} -c -static -I${luajit_path}/include"
+	make --directory=ext/lua_signal CC="${CC}" CFLAGS="${CFLAGS} -target ${TARGET} -c -static -I${luajit_path}/include"
 	mv ext/lua_signal/signal.so obj/lua_signal.o
 
 obj/sleep.o: ext/sleep/sleep.c | obj/
-	$(CC) ${CFLAGS} -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
+	${CC} ${CFLAGS} -target ${TARGET} -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
 
 lua_modules/%:
 	./luarocks build --only-deps >/dev/null

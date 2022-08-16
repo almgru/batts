@@ -19,7 +19,6 @@
                     packages = [
                         pkgs.luajit
                         pkgs.luajitPackages.luarocks
-                        pkgs.musl
                         pkgs.zig
                         pkgs.pkgsStatic.libunwind
                         pkgs.xz
