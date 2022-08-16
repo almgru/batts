@@ -15,7 +15,7 @@ Distributed as a static musl binary, so should work on any x86\_64 or aarch64 Li
 A systemd service file is provided in the release archive. See below for installing it.
 
 If you can't or don't want to use systemd, you can just start the daemon in your `~/.profile`, `~/.bash_profile`,
-`~/.zprofile` or `.config/fish/config.fish`:
+`~/.zprofile` or `~/.config/fish/config.fish`:
 
 ```bash
 batstat daemon &
