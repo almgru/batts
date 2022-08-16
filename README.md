@@ -103,17 +103,18 @@ static binary release. If you need to debug the build of the static binary, use 
    ~/repos/batstat $ nix develop '.#release' -c make
    ```
 
-#### Manual (Not recommended)
+#### Manual
 
 1. Install the following dependencies using your distro's package manager:
    - make >= 4.3
+   - automake >= 1.16.5
+   - autoconf >= 2.71
+   - libtool >= 2.4.7
    - luajit >= 2.1.0
    - luarocks >= 3.9.0
-   - musl >= 1.2.3
    - zig >= 0.9.1
    - xz >= 5.2.5
-2. Compile a static version of libunwind 1.6.2
-3. Build:
+2. Build:
    ```bash
    ~/repos/batstat $ make
    ```
