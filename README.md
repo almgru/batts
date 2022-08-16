@@ -124,7 +124,9 @@ static binary release. If you need to debug the build of the static binary, use 
 
 1. Install `qemu-system-aarch64`.
 2. Enable [qemu-user-static](https://github.com/multiarch/qemu-user-static):
+
    With docker: `docker run --rm --privileged multiarch/qemu-user-static --reset -p yes`
+   
    With podman: `sudo podman run --rm --privileged multiarch/qemu-user-static --reset -p yes`
 3. Add the following to `/etc/nix/nix.conf`:
    ```
