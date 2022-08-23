@@ -8,10 +8,7 @@
         with flake-utils.lib;
 
         eachSystem [
-            system.i686-linux
             system.x86_64-linux
-            system.armv7l-linux
-            system.aarch64-linux
         ] (system:
             let pkgs = nixpkgs.legacyPackages.${system};
             in {
@@ -29,9 +26,7 @@
                             pkgs.luajit
                             pkgs.luajitPackages.luarocks
                             pkgs.zig
-                            pkgs.autoconf
-                            pkgs.automake
-                            pkgs.libtool
+                            pkgs.pkgsStatic.libunwind
                             pkgs.xz
                         ];
                     };

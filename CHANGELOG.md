@@ -2,7 +2,11 @@
 
 ## [0.1.3] - 2022-08-23
 
-Bugfix and runit support.
+Remove support for other platforms.
+
+### Removed
+
+- Support for aarch64 and 32-bit x86 and ARM.
 
 ### Added
 
