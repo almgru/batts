@@ -29,6 +29,14 @@ batstat daemon &
    $ systemctl --user enable --now batstat-daemon
    ```
 
+#### Using runit (optional)
+
+1. Copy `service/runit/batstat` from the archive to `/etc/sv/batstat`.
+2. Enable the service:
+   ```bash
+   $ sudo ln -sf /etc/sv/batstat /var/service/
+   ```
+
 ## Usage
 
 To see statistics about battery use, run `batstat stats`. Note that some stats will not be available until the daemon

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.3] - 2022-08-23
+
+Bugfix and runit support.
+
+### Added
+
+- runit service file.
+
+### Fixed
+
+- Crash when parsing log file if battery status was "Not charging".
+
 ## [0.1.2] - 2022-08-16
 
 Adds support for x86 and armv7a.
