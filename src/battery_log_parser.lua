@@ -4,7 +4,7 @@ local math_utils = require('math_utils')
 local battery_log_parser = {}
 
 local function parse_log_entry(log_line)
-   local pattern = '(%d+-%d+-%d+ %d+:%d+:%d+): (BAT%d), (%a+), (%d+)%%(.*)$'
+   local pattern = '(%d+-%d+-%d+ %d+:%d+:%d+): (BAT%d), ([^,]+), (%d+)%%(.*)$'
    local date_string, name, status, capacity, trailing = log_line:match(pattern)
    local power
 
