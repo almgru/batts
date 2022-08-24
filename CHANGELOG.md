@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- If 59 minutes where rounded to 60, duration showed as "X hours, 60 minutes" instead of "X+1 hours, 0 minutes".
+
 ## [0.1.3] - 2022-08-23
 
 Remove support for other platforms.
