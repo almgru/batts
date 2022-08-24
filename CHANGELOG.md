@@ -2,9 +2,17 @@
 
 ## Unreleased
 
+### Added
+
+- Uncertainty/standard deviation for extrapolated full charge discharge time and mean off-line power draw.
+
 ### Removed
 
 - '===' after battery name.
+
+### Changed
+
+- Use plus-minus sign instead of sigma sign for uncertainty.
 
 ### Fixed
 

@@ -89,13 +89,17 @@ elseif args.stats then
          return acc
       end)
       local mean_power_draw = stats.mean(power_draw)
+      local stddev_power_draw = stats.standard_deviation(power_draw)
 
       local mean_duration_hours, mean_duration_minutes = date_utils.get_hours_and_minutes(mean_duration)
       local stddev_duration_hours, stddev_duration_minutes = date_utils.get_hours_and_minutes(stddev_durations)
       local mean_discharge_rate = mean_drain_per_minute * 60
       local stddev_discharge_rate = stddev_drain_per_minute * 60
       local extrapolated_full_discharge_time = 100 / math.abs(mean_drain_per_minute)
+      local extrapolated_full_discharge_time_stdev = extrapolated_full_discharge_time *
+          (stddev_drain_per_minute / math.abs(mean_drain_per_minute))
       local extrapolated_hours, extrapolated_minutes = date_utils.get_hours_and_minutes(extrapolated_full_discharge_time)
+      local extrapolated_stddev_hours, extrapolated_stddev_minutes = date_utils.get_hours_and_minutes(extrapolated_full_discharge_time_stdev)
 
       local battery_cycle_count_file, battery_cycle_count_err = io.open('/sys/class/power_supply/' ..
          battery .. '/cycle_count', 'r')
@@ -133,16 +137,16 @@ elseif args.stats then
       print(string.format('capacity health: %.0f%%', battery_capacity_health * 100))
 
       if tostring(mean_duration) ~= "nan" then
-         print('mean discharge time: ' .. mean_duration_hours .. 'h ' .. mean_duration_minutes .. 'm (σ ' ..
+         print('mean discharge time: ' .. mean_duration_hours .. 'h ' .. mean_duration_minutes .. 'm (± ' ..
             stddev_duration_hours .. 'h ' .. stddev_duration_minutes .. 'm)')
       end
 
       if tostring(mean_drain_per_minute) ~= "nan" then
-         print('mean discharge rate per hour: ' .. string.format('%.2f', mean_discharge_rate) .. '% (σ ' ..
+         print('mean discharge rate per hour: ' .. string.format('%.2f', mean_discharge_rate) .. '% (± ' ..
             string.format('%.2f', stddev_discharge_rate) .. '%)')
 
-         print('extrapolated full charge discharge time: ' ..
-            extrapolated_hours .. 'h ' .. extrapolated_minutes .. 'm')
+         print('extrapolated full charge discharge time: ' .. extrapolated_hours .. 'h ' .. extrapolated_minutes ..
+            'm (± ' .. extrapolated_stddev_hours .. 'h ' .. extrapolated_stddev_minutes .. 'm)')
       end
 
       if tostring(mean_capacity_range_lower) ~= "nan" and tostring(mean_capacity_range_upper) ~= "nan" then
@@ -150,7 +154,7 @@ elseif args.stats then
       end
 
       if tostring(mean_power_draw) ~= "nan" then
-         print('mean off-line power draw: ' .. string.format('%.2f W', mean_power_draw))
+         print('mean off-line power draw: ' .. string.format('%.2f W (± %.2f W)', mean_power_draw, stddev_power_draw))
       end
 
       if any_nan then
