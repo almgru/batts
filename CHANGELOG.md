@@ -4,7 +4,7 @@
 
 ### Added
 
-- Uncertainty/standard deviation for extrapolated full charge discharge time and mean off-line power draw.
+- Uncertainty/standard deviation for mean off-line power draw.
 
 ### Removed
 
