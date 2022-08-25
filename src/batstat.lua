@@ -46,30 +46,12 @@ elseif args.stats then
       local mean_duration = stats.mean(durations)
       local stddev_durations = stats.standard_deviation(durations)
 
-      if #durations > stats.min_filter_population then
-         local z_scores = stats.z_scores(durations, mean_duration, stddev_durations)
-         durations = stats.filter_out_outliers(durations, z_scores)
-
-         -- trim mean and stddev to exclude outliers
-         mean_duration = stats.mean(durations)
-         stddev_durations = stats.standard_deviation(durations)
-      end
-
       local capacity_drain_per_minute = func.map(battery_usage_summaries, function(summary)
          return (summary.capacity_when_charging_started - summary.capacity_when_charging_stopped) / summary.duration
       end)
 
       local mean_drain_per_minute = stats.mean(capacity_drain_per_minute)
       local stddev_drain_per_minute = stats.standard_deviation(capacity_drain_per_minute)
-
-      if #capacity_drain_per_minute > stats.min_filter_population then
-         local z_scores = stats.z_scores(capacity_drain_per_minute, mean_drain_per_minute, stddev_drain_per_minute)
-         capacity_drain_per_minute = stats.filter_out_outliers(capacity_drain_per_minute, z_scores)
-
-         -- trim mean and stddev to exclude outliers
-         mean_drain_per_minute = stats.mean(capacity_drain_per_minute)
-         stddev_drain_per_minute = stats.standard_deviation(capacity_drain_per_minute)
-      end
 
       local capacity_range_lower = func.map(battery_usage_summaries, function(summary)
          return summary.capacity_when_charging_started

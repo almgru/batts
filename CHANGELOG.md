@@ -9,6 +9,7 @@
 ### Removed
 
 - '===' after battery name.
+- Filtering out outliers.
 
 ### Changed
 
