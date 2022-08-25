@@ -78,7 +78,9 @@ elseif args.stats then
       local mean_discharge_rate = mean_drain_per_minute * 60
       local stddev_discharge_rate = stddev_drain_per_minute * 60
       local extrapolated_full_discharge_time = 100 / math.abs(mean_drain_per_minute)
+      local extrapolated_stddev = 100 / (math.abs(mean_drain_per_minute) + math.abs(stddev_drain_per_minute))
       local extrapolated_hours, extrapolated_minutes = date_utils.get_hours_and_minutes(extrapolated_full_discharge_time)
+      local extrapolated_stddev_hours, extrapolated_stddev_minutes = date_utils.get_hours_and_minutes(extrapolated_stddev)
 
       local battery_cycle_count_file, battery_cycle_count_err = io.open('/sys/class/power_supply/' ..
          battery .. '/cycle_count', 'r')
@@ -124,7 +126,8 @@ elseif args.stats then
          print('mean discharge rate per hour: ' .. string.format('%.2f', mean_discharge_rate) .. '% (± ' ..
             string.format('%.2f', stddev_discharge_rate) .. '%)')
 
-         print('extrapolated full charge discharge time: ' .. extrapolated_hours .. 'h ' .. extrapolated_minutes .. 'm')
+         print('extrapolated full charge discharge time: ' .. extrapolated_hours .. 'h ' .. extrapolated_minutes ..
+            'm (± ' .. extrapolated_stddev_hours .. 'h ' .. extrapolated_stddev_minutes .. 'm)')
       end
 
       if tostring(mean_capacity_range_lower) ~= "nan" and tostring(mean_capacity_range_upper) ~= "nan" then

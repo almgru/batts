@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Standard deviation for extrapolated full charge discharge time.
+
 ## [0.1.4] - 2022-08-25
 
 ### Added
