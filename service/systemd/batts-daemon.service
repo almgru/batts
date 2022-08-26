@@ -1,0 +1,8 @@
+[Unit]
+Description=batts daemon
+
+[Service]
+ExecStart=batts daemon --interval-in-seconds=60 --log-directory=$XDG_DATA_HOME/batts
+
+[Install]
+WantedBy=default.target

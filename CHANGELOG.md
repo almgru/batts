@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Renames project to `batts`.
 - Use tabs to improve readability of stats output.
 - Reorder stats in stats output.
 

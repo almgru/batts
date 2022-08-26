@@ -1,8 +1,0 @@
-[Unit]
-Description=batstat daemon
-
-[Service]
-ExecStart=batstat daemon --interval-in-seconds=60 --log-directory=$XDG_DATA_HOME/batstat
-
-[Install]
-WantedBy=default.target

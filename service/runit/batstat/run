@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec batstat --interval-in-seconds=60 --log-directory=$XDG_DATA_HOME/batstat

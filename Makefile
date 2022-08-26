@@ -7,33 +7,33 @@ luajit_path := $(shell readlink -f "$$(dirname "$$(which luajit)")"/..)
 libunwind_path := $(shell find / -path '*/lib/*' -name 'libunwind.a' -print -quit 2>/dev/null)
 
 .PHONY: all
-all: batstat-${VERSION}.tar.xz
+all: batts-${VERSION}.tar.xz
 
 .PHONY: clean
 clean:
 	./luarocks purge --tree lua_modules >/dev/null
-	rm -rf bin build lib ext batstat-*.tar batstat-*.tar.xz
-	find . -maxdepth 1 -type d -name 'batstat-*' -exec rm -r {} +
+	rm -rf bin build lib ext batts-*.tar batts-*.tar.xz
+	find . -maxdepth 1 -type d -name 'batts-*' -exec rm -r {} +
 
-batstat-${VERSION}.tar.xz: batstat-${VERSION}.tar
+batts-${VERSION}.tar.xz: batts-${VERSION}.tar
 	xz --keep --best --force $<
 
-batstat-${VERSION}.tar: batstat-${VERSION}/
+batts-${VERSION}.tar: batts-${VERSION}/
 	tar -c -f $@ $<
 
-batstat-${VERSION}/: bin/batstat service/systemd/batstat-daemon.service
+batts-${VERSION}/: bin/batts service/systemd/batts-daemon.service
 	rm -rf $@
 	mkdir -p $@
 	cp -r service README.md LICENSE.txt CHANGELOG.md $@
-	cp bin/batstat $@/batstat
+	cp bin/batts $@/batts
 
-bin/batstat: lib/lua_signal.a lib/sleep.a $(sources) lua_modules/share/lua/5.1/argparse.lua lua_modules/bin/luastatic \
+bin/batts: lib/lua_signal.a lib/sleep.a $(sources) lua_modules/share/lua/5.1/argparse.lua lua_modules/bin/luastatic \
 		| build/ bin/
 	cp ${sources} build/
 	cp lua_modules/share/lua/5.1/argparse.lua build/
 	cp lib/lua_signal.a lib/sleep.a build/
 	cd build && CC="${CC}" ../lua_modules/bin/luastatic \
-	   batstat.lua \
+	   batts.lua \
 	   cli_parser.lua daemon.lua date_utils.lua func.lua math_utils.lua stats.lua battery_log_parser.lua \
 	   argparse.lua \
 	   lua_signal.a sleep.a \
@@ -42,7 +42,7 @@ bin/batstat: lib/lua_signal.a lib/sleep.a $(sources) lua_modules/share/lua/5.1/a
 	   -I${luajit_path}/include \
 	   -L${libunwind_path}/lib/libunwind -lunwind \
 	   -lm -lpthread -ldl
-	cp build/batstat bin/batstat
+	cp build/batts bin/batts
 
 lib/lua_signal.a: ext/lua_signal/lsignal.c | lib/
 	make --directory=ext/lua_signal CC="${CC}" CFLAGS="${CFLAGS} -c -static -I${luajit_path}/include"

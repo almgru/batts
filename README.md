@@ -1,7 +1,7 @@
-# batstat
+# batts
 
 ```bash
-$ batstat stats
+$ batts stats
 BAT1
 mean off-line power draw:                   4.71 W (± 2.83 W)
 mean discharge rate per hour:               10.78% (± 8.87%)
@@ -21,17 +21,17 @@ Distributed as a static musl binary, so should work on any Linux distribution.
 
 ### With [stew](https://github.com/marwanhawari/stew)
 
-1. `stew install almgru/batstat`.
+1. `stew install almgru/batts`.
 2. Select latest version.
 3. Select tar.xz asset file.
 
-If you install with stew you can easily upgrade with `stew upgrade batstat`. However, stew only manages the binary, to
+If you install with stew you can easily upgrade with `stew upgrade batts`. However, stew only manages the binary, to
 get the service file you still need to extract it from the tarball. It can be found in `~/.local/share/stew/pkg`.
 
 ### Manually
 
 1. Download the latest archive from the releases page.
-2. Extract the archive and copy the `batstat` binary to somewhere in your `$PATH`.
+2. Extract the archive and copy the `batts` binary to somewhere in your `$PATH`.
 
 ### Starting the daemon
 
@@ -41,37 +41,37 @@ If you can't or don't want to use systemd, you can just start the daemon in your
 `~/.zprofile` or `~/.config/fish/config.fish`:
 
 ```bash
-batstat daemon &
+batts daemon &
 ```
 
 #### Using systemd user (optional)
 
-1. Copy `service/systemd/batstat-daemon.service` from the archive to `~/.config/systemd/user/batstat-daemon.service`.
+1. Copy `service/systemd/batts-daemon.service` from the archive to `~/.config/systemd/user/batts-daemon.service`.
 2. Start the service:
    ```bash
-   $ systemctl --user enable --now batstat-daemon
+   $ systemctl --user enable --now batts-daemon
    ```
 
 #### Using runit (optional)
 
-1. Copy `service/runit/batstat` from the archive to `/etc/sv/batstat`.
+1. Copy `service/runit/batts` from the archive to `/etc/sv/batts`.
 2. Enable the service:
    ```bash
-   $ sudo ln -sf /etc/sv/batstat /var/service/
+   $ sudo ln -sf /etc/sv/batts /var/service/
    ```
 
 ## Usage
 
-To see statistics about battery use, run `batstat stats`. Note that some stats will not be available until the daemon
+To see statistics about battery use, run `batts stats`. Note that some stats will not be available until the daemon
 has run for a while.
 
-To start the daemon, run `batstat daemon`. Note that the daemon runs in the foreground as it's intended to be started
+To start the daemon, run `batts daemon`. Note that the daemon runs in the foreground as it's intended to be started
 by a service supervisor or in your `~/.profile` equivalent.
 
 ### Global options
 
 - __`-l <dir>`__ or __`--log-directory <dir>`__: directory to save battery log file to. Defaults to
-`~/.local/share/batstat`.
+`~/.local/share/batts`.
 
 ### `daemon` options
 
@@ -86,17 +86,17 @@ by a service supervisor or in your `~/.profile` equivalent.
 1. [Enable flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes) in nix.
 2. Enter the dev shell:
    ```bash
-   ~/repos/batstat $ nix develop -c $SHELL
+   ~/repos/batts $ nix develop -c $SHELL
    ```
 3. Initialize luarocks:
    ```bash
-   ~/repos/batstat $ luarocks init
+   ~/repos/batts $ luarocks init
    ```
 
 To automatically enter the dev shell when entering the repo directory:
 
 1. Install direnv
-2. `~/repos/batstat $ echo "use flake" >> .envrc`
+2. `~/repos/batts $ echo "use flake" >> .envrc`
 
 __NOTE:__ There are two dev shells availabe. The default dev shell described here, and one shell for building the
 static binary release. If you need to debug the build of the static binary, use that one instead.
@@ -109,7 +109,7 @@ static binary release. If you need to debug the build of the static binary, use 
    - lua-language-server >= 3.4.1
 2. Initialize luarocks:
    ```bash
-   ~/repos/batstat $ luarocks init
+   ~/repos/batts $ luarocks init
    ```
 
 ### Building
@@ -118,7 +118,7 @@ static binary release. If you need to debug the build of the static binary, use 
 
 ### Running
 
-1. `./lua_modules/bin/batstat`
+1. `./lua_modules/bin/batts`
 
 ### Running tests
 
@@ -131,6 +131,6 @@ static binary release. If you need to debug the build of the static binary, use 
 1. [Enable flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes) in nix.
 2. Build with
    ```bash
-   ~/repos/batstat $ nix develop '.#release' -c make
+   ~/repos/batts $ nix develop '.#release' -c make
    ```
 

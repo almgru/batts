@@ -10,10 +10,10 @@ local args, err = cli_parser:parse()
 if not args and err then
    error(err)
 elseif args.stats then
-   if args.log_directory == '$XDG_DATA_HOME/batstat' then
+   if args.log_directory == '$XDG_DATA_HOME/batts' then
       local home = os.getenv('HOME') or error('HOME is not set.')
       local xdg_data_home = os.getenv('XDG_DATA_HOME') or home .. '/.local/share'
-      args.log_directory = xdg_data_home .. '/batstat'
+      args.log_directory = xdg_data_home .. '/batts'
    end
 
    local find, find_err = io.popen('/usr/bin/find ' .. args.log_directory .. ' -maxdepth 1 -name "BAT*"')
@@ -27,7 +27,7 @@ elseif args.stats then
    find:close()
 
    if #bat_log_files == 0 then
-      print('No battery log files found. Please start the batstat daemon.')
+      print('No battery log files found. Please start the batts daemon.')
       os.exit(0)
    end
 
@@ -146,10 +146,10 @@ elseif args.stats then
       print('cycle count:\t\t\t\t\t' .. battery_cycle_count)
    end
 elseif args.daemon then
-   if args.log_directory == '$XDG_DATA_HOME/batstat' then
+   if args.log_directory == '$XDG_DATA_HOME/batts' then
       local home = os.getenv('HOME') or error('HOME is not set.')
       local xdg_data_home = os.getenv('XDG_DATA_HOME') or home .. '/.local/share'
-      args.log_directory = xdg_data_home .. '/batstat'
+      args.log_directory = xdg_data_home .. '/batts'
    end
 
    os.execute('mkdir -p ' .. args.log_directory)
