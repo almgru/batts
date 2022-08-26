@@ -7,11 +7,6 @@ Distributed as a static musl binary, so should work on any Linux distribution.
 
 ## Installing
 
-### Manually
-
-1. Download the latest archive from the releases page.
-2. Extract the archive and copy the `batstat` binary to somewhere in your `$PATH`.
-
 ### With [stew](https://github.com/marwanhawari/stew)
 
 1. `stew install almgru/batstat`.
@@ -20,6 +15,11 @@ Distributed as a static musl binary, so should work on any Linux distribution.
 
 If you install with stew you can easily upgrade with `stew upgrade batstat`. However, stew only manages the binary, to
 get the service file you still need to extract it from the tarball. It can be found in `~/.local/share/stew/pkg`.
+
+### Manually
+
+1. Download the latest archive from the releases page.
+2. Extract the archive and copy the `batstat` binary to somewhere in your `$PATH`.
 
 ### Starting the daemon
 
