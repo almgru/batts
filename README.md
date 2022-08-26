@@ -19,7 +19,7 @@ Distributed as a static musl binary, so should work on any Linux distribution.
 3. Select tar.xz asset file.
 
 If you install with stew you can easily upgrade with `stew upgrade batstat`. However, stew only manages the binary, to
-get the service file you still need to extract it from the tarball. It can be found in `~/.local/share/stew`.
+get the service file you still need to extract it from the tarball. It can be found in `~/.local/share/stew/pkg`.
 
 ### Starting the daemon
 
