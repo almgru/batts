@@ -3,13 +3,13 @@
 ```bash
 $ batstat stats
 BAT1
-cycle count: 27
-capacity health: 97%
-mean discharge time: 2h 35m (± 1h 7m)
-mean discharge rate per hour: -10.78% (± 8.87%)
-extrapolated full charge discharge time: 9h 17m (± 5h 5m)
-mean off-line capacity range: 61% - 39%
-mean off-line power draw: 4.71 W (± 2.83 W)
+mean off-line power draw:                   4.71 W (± 2.83 W)
+mean discharge rate per hour:               10.78% (± 8.87%)
+mean off-line capacity range:               61% - 39%
+mean discharge time:                        2h 35m (± 1h 7m)
+extrapolated full charge discharge time:    9h 17m (± 5h 5m)
+capacity health:                            97%
+cycle count:                                28
 ```
 
 Simple Linux utility to track and display statistics about battery usage, like average time to discharge, average

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Use tabs to improve readability of stats output.
+- Reorder stats in stats output.
+
 ## [0.1.5] - 2022-08-26
 
 ### Added

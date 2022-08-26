@@ -75,7 +75,7 @@ elseif args.stats then
 
       local mean_duration_hours, mean_duration_minutes = date_utils.get_hours_and_minutes(mean_duration)
       local stddev_duration_hours, stddev_duration_minutes = date_utils.get_hours_and_minutes(stddev_durations)
-      local mean_discharge_rate = mean_drain_per_minute * 60
+      local mean_discharge_rate = math.abs(mean_drain_per_minute * 60)
       local stddev_discharge_rate = stddev_drain_per_minute * 60
       local extrapolated_full_discharge_time = 100 / math.abs(mean_drain_per_minute)
       local extrapolated_stddev = 100 / (math.abs(mean_drain_per_minute) + math.abs(stddev_drain_per_minute))
@@ -107,40 +107,43 @@ elseif args.stats then
       battery_full_file:close()
       battery_full_design_file:close()
 
+      print(battery)
+
       local any_nan = tostring(mean_duration) == "nan"
           or tostring(mean_drain_per_minute) == "nan"
           or tostring(mean_capacity_range_lower) == "nan" or tostring(mean_capacity_range_upper) == "nan"
           or tostring(mean_power_draw) == "nan"
 
-      print(battery)
-
-      print('cycle count: ' .. battery_cycle_count)
-      print(string.format('capacity health: %.0f%%', battery_capacity_health * 100))
-
-      if tostring(mean_duration) ~= "nan" then
-         print('mean discharge time: ' .. mean_duration_hours .. 'h ' .. mean_duration_minutes .. 'm (± ' ..
-            stddev_duration_hours .. 'h ' .. stddev_duration_minutes .. 'm)')
-      end
-
-      if tostring(mean_drain_per_minute) ~= "nan" then
-         print('mean discharge rate per hour: ' .. string.format('%.2f', mean_discharge_rate) .. '% (± ' ..
-            string.format('%.2f', stddev_discharge_rate) .. '%)')
-
-         print('extrapolated full charge discharge time: ' .. extrapolated_hours .. 'h ' .. extrapolated_minutes ..
-            'm (± ' .. extrapolated_stddev_hours .. 'h ' .. extrapolated_stddev_minutes .. 'm)')
-      end
-
-      if tostring(mean_capacity_range_lower) ~= "nan" and tostring(mean_capacity_range_upper) ~= "nan" then
-         print('mean off-line capacity range: ' .. mean_capacity_range)
-      end
-
-      if tostring(mean_power_draw) ~= "nan" then
-         print('mean off-line power draw: ' .. string.format('%.2f W (± %.2f W)', mean_power_draw, stddev_power_draw))
-      end
-
       if any_nan then
          print('Some statistics are not ready yet. Check back later.')
+      else
+         if tostring(mean_power_draw) ~= "nan" then
+            print('mean off-line power draw:\t\t\t' ..
+               string.format('%.2f W (± %.2f W)', mean_power_draw, stddev_power_draw))
+         end
+
+         if tostring(mean_drain_per_minute) ~= "nan" then
+            print('mean discharge rate per hour:\t\t\t' .. string.format('%.2f', mean_discharge_rate) .. '% (± ' ..
+               string.format('%.2f', stddev_discharge_rate) .. '%)')
+         end
+
+         if tostring(mean_capacity_range_lower) ~= "nan" and tostring(mean_capacity_range_upper) ~= "nan" then
+            print('mean off-line capacity range:\t\t\t' .. mean_capacity_range)
+         end
+
+         if tostring(mean_duration) ~= "nan" then
+            print('mean discharge time:\t\t\t\t' .. mean_duration_hours .. 'h ' .. mean_duration_minutes .. 'm (± ' ..
+               stddev_duration_hours .. 'h ' .. stddev_duration_minutes .. 'm)')
+         end
+
+         if tostring(extrapolated_hours) ~= 'nan' then
+            print('extrapolated full charge discharge time:\t' .. extrapolated_hours .. 'h ' .. extrapolated_minutes ..
+               'm (± ' .. extrapolated_stddev_hours .. 'h ' .. extrapolated_stddev_minutes .. 'm)')
+         end
       end
+
+      print(string.format('capacity health:\t\t\t\t%.0f%%', battery_capacity_health * 100))
+      print('cycle count:\t\t\t\t\t' .. battery_cycle_count)
    end
 elseif args.daemon then
    if args.log_directory == '$XDG_DATA_HOME/batstat' then
