@@ -134,3 +134,21 @@ static binary release. If you need to debug the build of the static binary, use 
    ~/repos/batts $ nix develop '.#release' -c make
    ```
 
+## Credit
+
+See [LICENSE.txt](LICENSE.txt) for credits for dependencies included in binary.
+
+The following software is used during development, testing or building:
+
+- [LuaRocks (v. 3.9.0)](https://luarocks.org/)
+- [Nix (v. 2.10.3)](https://nixos.org/)
+- [zig (v. 0.9.1)](https://ziglang.org/)
+- [luastatic (v. 0.0.12)](https://github.com/ers35/luastatic)
+- [busted (v. 2.1.1](https://lunarmodules.github.io/busted/)
+- [luaposix (v. 35.1)](https://github.com/luaposix/luaposix)
+- [GNU Make (v. 4.3)](https://www.gnu.org/software/make/)
+- [xz (v. 5.2.5)](https://tukaani.org/xz/)
+- [GNU coreutils (v. 9.1)](https://www.gnu.org/software/coreutils/)
+- [GNU findutils (v. 4.9.0)](https://www.gnu.org/software/findutils/)
+- [UnZip (v. 6.00)](http://infozip.sourceforge.net/)
+
