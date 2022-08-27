@@ -3,13 +3,13 @@
 ```bash
 $ batts stats
 BAT1
-mean off-line power draw:                   4.71 W (± 2.83 W)
-mean discharge rate per hour:               10.78% (± 8.87%)
-mean off-line capacity range:               61% - 39%
-mean discharge time:                        2h 35m (± 1h 7m)
-extrapolated full charge discharge time:    9h 17m (± 5h 5m)
-capacity health:                            97%
-cycle count:                                28
+mean off-line power draw:                       4.67 W (± 2.79 W)
+mean discharge rate per hour:                   10.71% (± 8.81%)
+mean off-line capacity range:                   61% - 39%
+mean discharge time:                            2h 36m (± 1h 6m)
+extrapolated full charge discharge time:        9h 20m (± 5h 7m)
+capacity health:                                97% (58.6 Wh / 60.7 Wh)
+cycle count:                                    28
 ```
 
 Simple Linux utility to track and display statistics about battery usage, like average time to discharge, average
