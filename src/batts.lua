@@ -101,7 +101,9 @@ elseif args.stats then
       end
 
       local battery_cycle_count = battery_cycle_count_file:read('*n')
-      local battery_capacity_health = battery_full_file:read('*n') / battery_full_design_file:read('*n')
+      local battery_full = battery_full_file:read('*n')
+      local battery_full_design = battery_full_design_file:read('*n')
+      local battery_capacity_health = battery_full / battery_full_design
 
       battery_cycle_count_file:close()
       battery_full_file:close()
@@ -142,7 +144,13 @@ elseif args.stats then
          end
       end
 
-      print(string.format('capacity health:\t\t\t\t%.0f%%', battery_capacity_health * 100))
+      print(string.format(
+         'capacity health:\t\t\t\t%.0f%% (%.1f Wh / %.1f Wh)',
+         battery_capacity_health * 100,
+         battery_full / 1000000,
+         battery_full_design / 1000000
+      ))
+
       print('cycle count:\t\t\t\t\t' .. battery_cycle_count)
    end
 elseif args.daemon then

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Current and factory default capacity in Watt-hours for capacity health.
+
 ### Changed
 
 - Update busted to v. 2.1.1.
