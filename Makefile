@@ -1,6 +1,7 @@
 CC = zig cc
 CFLAGS = -O2
 VERSION = dev-1
+TARGET = x86_64-linux-musl
 
 sources := $(shell find src -name '*.lua')
 luajit_path := $(shell readlink -f "$$(dirname "$$(which luajit)")"/..)
@@ -38,18 +39,18 @@ bin/batts: lib/lua_signal.a lib/sleep.a $(sources) lua_modules/share/lua/5.1/arg
 	   argparse.lua \
 	   lua_signal.a sleep.a \
 	   ${luajit_path}/lib/libluajit-5.1.a \
-	   -static -Bstatic ${CFLAGS} \
+	   -static -Bstatic -target ${TARGET} ${CFLAGS} \
 	   -I${luajit_path}/include \
 	   -L${libunwind_path}/lib/libunwind -lunwind \
 	   -lm -lpthread -ldl
 	cp build/batts bin/batts
 
 lib/lua_signal.a: ext/lua_signal/lsignal.c | lib/
-	make --directory=ext/lua_signal CC="${CC}" CFLAGS="${CFLAGS} -c -static -I${luajit_path}/include"
+	make --directory=ext/lua_signal CC="${CC}" CFLAGS="${CFLAGS} -c -static -target ${TARGET} -I${luajit_path}/include"
 	mv ext/lua_signal/signal.so $@
 
 lib/sleep.a: ext/sleep/sleep.c | lib/
-	${CC} ${CFLAGS} -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
+	${CC} -target ${TARGET} ${CFLAGS} -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
 
 lua_modules/%:
 	./luarocks build --only-deps >/dev/null

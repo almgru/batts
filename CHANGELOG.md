@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.8] - 2022-08-27
+
+Fixes binary to be statically linked again.
+
+### Fixed
+
+- Removing multilib support in 0.1.3 accidentally caused binary to be dynamically instead of statically linked.
+
 ## [0.1.7] - 2022-08-27
 
 ### Added
