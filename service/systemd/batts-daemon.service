@@ -3,6 +3,7 @@ Description=batts daemon
 
 [Service]
 ExecStart=batts daemon --interval-in-seconds=60 --log-directory=$XDG_DATA_HOME/batts
+ExecSearchPath=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/opt/batts:%h/.bin:%h/.local/bin
 
 [Install]
 WantedBy=default.target

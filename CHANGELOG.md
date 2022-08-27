@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Systemd service not finding executable if it's not stored in /usr/bin or /usr/local/bin. Now searches in /opt/batts,
+  $HOME/.bin and $HOME/.local/bin as well.
+
 ## [0.1.6] - 2022-08-27
 
 ### Changed
