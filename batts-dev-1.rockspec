@@ -19,7 +19,7 @@ dependencies = {
    'luastatic >= 0.0.12-1',
 }
 test_dependencies = {
-   'busted >= 2.0.0-1',
+   'busted >= 2.1.1-1',
    'luaposix >= 35.1-1',
 }
 test = {

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Update busted to v. 2.1.1.
+
 ### Fixed
 
 - Systemd service not finding executable if it's not stored in /usr/bin or /usr/local/bin. Now searches in /opt/batts,
