@@ -28,15 +28,15 @@ batts-${VERSION}/: bin/batts service/systemd/batts-daemon.service
 	cp -r service README.md LICENSE.txt CHANGELOG.md $@
 	cp bin/batts $@/batts
 
-bin/batts: lib/lua_signal.a lib/sleep.a $(sources) lua_modules/share/lua/5.1/argparse.lua lua_modules/bin/luastatic \
-		| build/ bin/
+bin/batts: lib/lua_signal.a lib/sleep.a $(sources) lua_modules/share/lua/5.1/argparse.lua \
+		lua_modules/share/lua/5.1/ansicolors.lua lua_modules/bin/luastatic | build/ bin/
 	cp ${sources} build/
-	cp lua_modules/share/lua/5.1/argparse.lua build/
+	cp lua_modules/share/lua/5.1/argparse.lua lua_modules/share/lua/5.1/ansicolors.lua build/
 	cp lib/lua_signal.a lib/sleep.a build/
 	cd build && CC="${CC}" ../lua_modules/bin/luastatic \
 	   batts.lua \
 	   cli_parser.lua daemon.lua date_utils.lua func.lua math_utils.lua stats.lua battery_log_parser.lua \
-	   argparse.lua \
+	   argparse.lua ansicolors.lua \
 	   lua_signal.a sleep.a \
 	   ${luajit_path}/lib/libluajit-5.1.a \
 	   -static -Bstatic -target ${TARGET} ${CFLAGS} \

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Colored output for capacity range and capacity health.
+
 ## [0.1.8] - 2022-08-27
 
 Fixes binary to be statically linked again.

@@ -17,6 +17,7 @@ dependencies = {
    'sleep >= 1.0.0-4',
    'lua_signal >= 1.2.0-1',
    'luastatic >= 0.0.12-1',
+   'ansicolors >= 1.0.2-3',
 }
 test_dependencies = {
    'busted >= 2.1.1-1',

@@ -1,3 +1,5 @@
+local colors = require('ansicolors')
+
 local cli_parser = require('cli_parser')
 local daemon = require('daemon')
 local stats = require('stats')
@@ -27,7 +29,7 @@ elseif args.stats then
    find:close()
 
    if #bat_log_files == 0 then
-      print('No battery log files found. Please start the batts daemon.')
+      print(colors('%{red}No battery log files found. Please start the batts daemon.'))
       os.exit(0)
    end
 
@@ -63,7 +65,6 @@ elseif args.stats then
 
       local mean_capacity_range_lower = stats.mean(capacity_range_lower)
       local mean_capacity_range_upper = stats.mean(capacity_range_upper)
-      local mean_capacity_range = string.format('%.0f%% - %.0f%%', mean_capacity_range_upper, mean_capacity_range_lower)
 
       local power_draw = func.reduce(battery_usage_summaries, {}, function(acc, el)
          for _, v in ipairs(el.power) do table.insert(acc, v) end
@@ -117,7 +118,7 @@ elseif args.stats then
           or tostring(mean_power_draw) == "nan"
 
       if any_nan then
-         print('Some statistics are not ready yet. Check back later.')
+         print(colors('%{yellow}Some statistics are not ready yet. Check back later.'))
       else
          if tostring(mean_power_draw) ~= "nan" then
             print('mean off-line power draw:\t\t\t' ..
@@ -130,7 +131,13 @@ elseif args.stats then
          end
 
          if tostring(mean_capacity_range_lower) ~= "nan" and tostring(mean_capacity_range_upper) ~= "nan" then
-            print('mean off-line capacity range:\t\t\t' .. mean_capacity_range)
+            local color = (mean_capacity_range_upper <= 80 and mean_capacity_range_lower >= 20 and 'green')
+                or (mean_capacity_range_upper >= 90 and mean_capacity_range_lower <= 10 and 'red')
+                or 'reset'
+
+            print(colors('mean off-line capacity range:\t\t\t' ..
+               string.format('%%{%s}%.0f%% - %.0f%%%%{reset}', color, mean_capacity_range_upper,
+                  mean_capacity_range_lower)))
          end
 
          if tostring(mean_duration) ~= "nan" then
@@ -144,12 +151,17 @@ elseif args.stats then
          end
       end
 
-      print(string.format(
-         'capacity health:\t\t\t\t%.0f%% (%.1f Wh / %.1f Wh)',
+      local health_color = (battery_capacity_health >= 0.95 and 'green')
+          or (battery_capacity_health <= 0.75 and 'red')
+          or 'reset'
+
+      print(colors(string.format(
+         'capacity health:\t\t\t\t%%{%s}%.0f%% (%.1f Wh / %.1f Wh)',
+         health_color,
          battery_capacity_health * 100,
          battery_full / 1000000,
          battery_full_design / 1000000
-      ))
+      )))
 
       print('cycle count:\t\t\t\t\t' .. battery_cycle_count)
    end
