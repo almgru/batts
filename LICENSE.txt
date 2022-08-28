@@ -38,5 +38,8 @@ https://github.com/batrick/lua-signal/blob/1483e0f252ddf845a455a749327b8523a228b
 This product bundles ansicolors 1.0.2, which is available under a "MIT" license. For details, see
 https://github.com/kikito/ansicolors.lua/blob/a209800d08a2b6a2445d2033cece0ed29fee1a2e/COPYING.
 
+This product bundles ftcsv 1.2.1, which is available under a "MIT" license. For details, see
+https://github.com/FourierTransformer/ftcsv/blob/697856f0c2df6bada1b5b4164d9ce0a389e542c3/LICENSE.
+
 This product bundles libunwind 1.6.2, which is available under a "MIT" license. For details, see
 https://github.com/libunwind/libunwind/blob/b3ca1b59a795a617877c01fe5d299ab7a07ff29d/LICENSE.

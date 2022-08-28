@@ -1,5 +1,11 @@
 local argparse = require('argparse')
 
+local function setup_version_cmd(parser)
+   parser
+       :command('version')
+       :summary('Get installed version')
+end
+
 local function setup_stats_cmd(parser)
    parser
        :command('stats')
@@ -26,6 +32,7 @@ parser:option('-l --log-directory', 'Directory to store/read battery logs from/t
     :args(1)
     :default('$XDG_DATA_HOME/batts')
 
+setup_version_cmd(parser)
 setup_stats_cmd(parser)
 setup_daemon_cmd(parser)
 

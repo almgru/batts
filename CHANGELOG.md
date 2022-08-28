@@ -1,9 +1,20 @@
 # Changelog
 
-## Unreleased
+## [0.2.0] - 2022-08-28
+
+Improves parsing performance by 4x by using [ftcsv](https://github.com/FourierTransformer/ftcsv).
+
+### Breaking changes
+
+- Change log format to CSV for improved performance.
+   + Added CSV headers.
+   + Timestamps changed from human readable ISO 8601 to unix timestamp.
+   + Timestamp separator changed to ','.
+   + Units removed from capacity and power.
 
 ### Added
 
+- `version` command to get current version.
 - Colored output for capacity range and capacity health.
 
 ## [0.1.8] - 2022-08-27

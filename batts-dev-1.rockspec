@@ -18,6 +18,7 @@ dependencies = {
    'lua_signal >= 1.2.0-1',
    'luastatic >= 0.0.12-1',
    'ansicolors >= 1.0.2-3',
+   'ftcsv >= 1.2.1-1',
 }
 test_dependencies = {
    'busted >= 2.1.1-1',

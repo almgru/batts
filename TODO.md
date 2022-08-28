@@ -1,6 +1,6 @@
 # To do
 
-- [ ] Improve performance
+- [X] Improve performance
 - [ ] Statistics about charging
     + [ ] Mean charge time
     + [ ] Charge wattage

@@ -1,3 +1,5 @@
+local version = 'dev-1'
+
 local colors = require('ansicolors')
 
 local cli_parser = require('cli_parser')
@@ -9,16 +11,16 @@ local func = require('func')
 
 local args, err = cli_parser:parse()
 
-if not args and err then
-   error(err)
-elseif args.stats then
-   if args.log_directory == '$XDG_DATA_HOME/batts' then
-      local home = os.getenv('HOME') or error('HOME is not set.')
-      local xdg_data_home = os.getenv('XDG_DATA_HOME') or home .. '/.local/share'
-      args.log_directory = xdg_data_home .. '/batts'
-   end
+if args.log_directory == '$XDG_DATA_HOME/batts' then
+   local home = os.getenv('HOME') or error('HOME is not set.')
+   local xdg_data_home = os.getenv('XDG_DATA_HOME') or home .. '/.local/share'
+   args.log_directory = xdg_data_home .. '/batts'
+end
 
-   local find, find_err = io.popen('/usr/bin/find ' .. args.log_directory .. ' -maxdepth 1 -name "BAT*"')
+os.execute('mkdir -p ' .. args.log_directory)
+
+local function get_battery_log_files(log_directory)
+   local find, find_err = io.popen('/usr/bin/find ' .. log_directory .. ' -maxdepth 1 -name "BAT*"')
    if not find then error(find_err) end
 
    local bat_log_files = {}
@@ -28,6 +30,14 @@ elseif args.stats then
 
    find:close()
 
+   return bat_log_files
+end
+
+if not args and err then
+   error(err)
+elseif args.stats then
+   local bat_log_files = get_battery_log_files(args.log_directory)
+
    if #bat_log_files == 0 then
       print(colors('%{red}No battery log files found. Please start the batts daemon.'))
       os.exit(0)
@@ -35,14 +45,7 @@ elseif args.stats then
 
    for _, file in ipairs(bat_log_files) do
       local battery = file:match('.*/(BAT%d)')
-      local log_file, log_file_err = io.open(file, 'r')
-
-      if not log_file then
-         error(log_file_err)
-      end
-
-      local battery_usage_summaries = battery_log_parser.parse(log_file)
-      log_file:close()
+      local battery_usage_summaries = battery_log_parser.parse(file)
 
       local durations = func.map(battery_usage_summaries, function(el) return el.duration end)
       local mean_duration = stats.mean(durations)
@@ -166,13 +169,7 @@ elseif args.stats then
       print('cycle count:\t\t\t\t\t' .. battery_cycle_count)
    end
 elseif args.daemon then
-   if args.log_directory == '$XDG_DATA_HOME/batts' then
-      local home = os.getenv('HOME') or error('HOME is not set.')
-      local xdg_data_home = os.getenv('XDG_DATA_HOME') or home .. '/.local/share'
-      args.log_directory = xdg_data_home .. '/batts'
-   end
-
-   os.execute('mkdir -p ' .. args.log_directory)
-
    daemon.start(args.interval_in_seconds, args.log_directory)
+elseif args.version then
+   print('batts version ' .. version)
 end
