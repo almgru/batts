@@ -37,7 +37,7 @@ get the service file you still need to extract it from the tarball. It can be fo
 
 A systemd service file is provided in the release archive. See below for installing it.
 
-If you can't or don't want to use systemd, you can just start the daemon in your `~/.profile`, `~/.bash_profile`,
+If you can't or don't want to use a service supervisor, you can just start the daemon in your `~/.profile`, `~/.bash_profile`,
 `~/.zprofile` or `~/.config/fish/config.fish`:
 
 ```bash
