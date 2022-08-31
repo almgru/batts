@@ -25,9 +25,9 @@
                         packages = [
                             pkgs.luajit
                             pkgs.luajitPackages.luarocks
-                            pkgs.zig
-                            pkgs.pkgsStatic.libunwind
+                            pkgs.gcc
                             pkgs.xz
+                            pkgs.patchelf
                         ];
                     };
                 };

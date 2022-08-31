@@ -1,6 +1,7 @@
 # To do
 
 - [X] Improve performance
+- [X] Signals (SIGINT, SIGTERM) still not working all the time.
 - [ ] Statistics about charging
     + [ ] Mean charge time
     + [ ] Charge wattage

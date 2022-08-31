@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+Switches from musl to glibc because of bug in signal library.
+
+### Changed
+
+- Switch from completely static musl binary to binary where everything but glibc is statically linked.
+
+### Fixed
+
+- Bug that causes signal handling to stop working. Worked around by switching from musl to glibc.
+
 ## [0.2.0] - 2022-08-28
 
 Improves parsing performance by 4x by using [ftcsv](https://github.com/FourierTransformer/ftcsv).
