@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.2.1] - 2022-09-01
 
 Switches from musl to glibc because of bug in signal library.
 

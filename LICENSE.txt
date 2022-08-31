@@ -23,9 +23,6 @@ SOFTWARE.
 This product bundles LuaJIT 2.1.0, which is available under a "MIT" license. For details, see
 https://luajit.org/luajit.html.
 
-This product bundles musl 1.2.3, which is available under a "MIT" license. For details, see
-https://musl.libc.org/about.html.
-
 This product bundles argparse 0.7.1, which is available under a "MIT" license. For details, see
 https://github.com/mpeterv/argparse/blob/412e6aca393e365f92c0315dfe50181b193f1ace/LICENSE.
 
@@ -40,6 +37,3 @@ https://github.com/kikito/ansicolors.lua/blob/a209800d08a2b6a2445d2033cece0ed29f
 
 This product bundles ftcsv 1.2.1, which is available under a "MIT" license. For details, see
 https://github.com/FourierTransformer/ftcsv/blob/697856f0c2df6bada1b5b4164d9ce0a389e542c3/LICENSE.
-
-This product bundles libunwind 1.6.2, which is available under a "MIT" license. For details, see
-https://github.com/libunwind/libunwind/blob/b3ca1b59a795a617877c01fe5d299ab7a07ff29d/LICENSE.

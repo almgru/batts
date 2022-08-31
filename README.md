@@ -15,9 +15,12 @@ cycle count:                                    28
 Simple Linux utility to track and display statistics about battery usage, like average time to discharge, average
 power draw and charge cycles used.
 
-Distributed as a static musl binary, so should work on any Linux distribution.
-
 ## Installing
+
+### Requirements
+
+- x86-64 Linux with glibc
+- `find` and `mkdir` commands
 
 ### With [stew](https://github.com/marwanhawari/stew)
 
@@ -99,7 +102,7 @@ To automatically enter the dev shell when entering the repo directory:
 2. `~/repos/batts $ echo "use flake" >> .envrc`
 
 __NOTE:__ There are two dev shells availabe. The default dev shell described here, and one shell for building the
-static binary release. If you need to debug the build of the static binary, use that one instead.
+binary release. If you need to debug the build of the binary, use that one instead.
 
 #### Manual
 
@@ -124,7 +127,7 @@ static binary release. If you need to debug the build of the static binary, use 
 
 1. `./luarocks test`
 
-### Building static binary
+### Building binary
 
 #### Using nix
 
