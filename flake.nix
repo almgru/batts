@@ -25,9 +25,11 @@
                         packages = [
                             pkgs.luajit
                             pkgs.luajitPackages.luarocks
-                            pkgs.gcc
+                            pkgs.zig
+                            pkgs.autoconf
+                            pkgs.automake
+                            pkgs.libtool
                             pkgs.xz
-                            pkgs.patchelf
                         ];
                     };
                 };

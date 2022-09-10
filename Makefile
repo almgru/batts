@@ -1,4 +1,4 @@
-CC = gcc
+CC = zig cc
 CFLAGS = -O2
 VERSION = dev-1
 
@@ -26,33 +26,44 @@ batts-${VERSION}/: bin/batts service/systemd/batts-daemon.service
 	cp -r service README.md LICENSE.txt CHANGELOG.md $@
 	cp bin/batts $@/batts
 
-bin/batts: lib/lua_signal.a lib/sleep.a $(sources) lua_modules/share/lua/5.1/argparse.lua \
+bin/batts: lib/lua_signal.a lib/sleep.a lib/libunwind.a $(sources) lua_modules/share/lua/5.1/argparse.lua \
 		lua_modules/share/lua/5.1/ansicolors.lua lua_modules/share/lua/5.1/ftcsv.lua lua_modules/bin/luastatic \
 		| build/ bin/
 	cp ${sources} build/
 	cp lua_modules/share/lua/5.1/argparse.lua lua_modules/share/lua/5.1/ansicolors.lua \
 		lua_modules/share/lua/5.1/ftcsv.lua build/
-	cp lib/lua_signal.a lib/sleep.a build/
+	cp lib/lua_signal.a lib/sleep.a lib/libunwind.a build/
 	cd build && CC="${CC}" ../lua_modules/bin/luastatic \
 	   batts.lua \
 	   cli_parser.lua daemon.lua date_utils.lua func.lua math_utils.lua stats.lua battery_log_parser.lua \
 	   argparse.lua ansicolors.lua ftcsv.lua \
-	   lua_signal.a sleep.a \
+	   lua_signal.a sleep.a libunwind.a \
 	   ${luajit_path}/lib/libluajit-5.1.a \
-	   -Bstatic -static-libgcc \
+	   -target x86_64-linux-musl -static -Bstatic \
+	   -I${luajit_path}/include \
+	   -lm -lpthread -ldl -lunwind \
 	   ${CFLAGS}
-	patchelf --set-rpath /usr/lib --set-interpreter /lib/ld-linux-x86-64.so.2 build/batts
 	cp build/batts bin/batts
 
+lib/libunwind.a: ext/libunwind/README | lib/
+	cd ext/libunwind && autoreconf -i && ./configure --target x86_64-linux-musl && make
+	mv ext/libunwind/src/.libs/libunwind-x86_64.a $@
+
 lib/lua_signal.a: ext/lua_signal/lsignal.c | lib/
-	make --directory=ext/lua_signal CC="${CC}" CFLAGS="${CFLAGS} -c -Bstatic -I${luajit_path}/include"
+	make --directory=ext/lua_signal CC="${CC}" CFLAGS="${CFLAGS} -target x86_64-linux-musl -c -static -I${luajit_path}/include"
 	mv ext/lua_signal/signal.so $@
 
 lib/sleep.a: ext/sleep/sleep.c | lib/
-	${CC} ${CFLAGS} -I${luajit_path}/include -Wall -fPIC -O2 -c -Bstatic ext/sleep/sleep.c -o $@
+	${CC} ${CFLAGS} -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
 
 lua_modules/%:
 	./luarocks build --only-deps >/dev/null
+
+ext/libunwind/README: | ext/download/libunwind/
+	curl -Lo ext/download/libunwind-1.6.2.tar.gz https://github.com/libunwind/libunwind/releases/download/v1.6.2/libunwind-1.6.2.tar.gz
+	tar --extract --file=ext/download/libunwind-1.6.2.tar.gz --directory=ext/download/
+	rm -rf ext/libunwind
+	mv ext/download/libunwind-1.6.2 ext/libunwind
 
 ext/lua_signal/lsignal.c: | ext/download/lua_signal/
 	./luarocks download --source lua_signal
@@ -68,5 +79,5 @@ ext/sleep/sleep.c: | ext/download/sleep/
 	rm -rf ext/sleep
 	mv ext/download/sleep/sleep/ ext/
 
-build/ bin/ lib/ ext/download/lua_signal/ ext/download/sleep/:
+build/ bin/ lib/ ext/download/lua_signal/ ext/download/sleep/ ext/download/libunwind/:
 	mkdir -p $@
