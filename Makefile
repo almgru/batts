@@ -39,10 +39,9 @@ bin/batts: lib/lua_signal.a lib/sleep.a lib/libunwind.a $(sources) lua_modules/s
 	   argparse.lua ansicolors.lua ftcsv.lua \
 	   lua_signal.a sleep.a libunwind.a \
 	   ${luajit_path}/lib/libluajit-5.1.a \
-	   -target x86_64-linux-musl -static -Bstatic \
+	   -target x86_64-linux-musl -static -Bstatic ${CFLAGS} \
 	   -I${luajit_path}/include \
-	   -lm -lpthread -ldl -lunwind \
-	   ${CFLAGS}
+	   -lm -lpthread -ldl -lunwind
 	cp build/batts bin/batts
 
 lib/libunwind.a: ext/libunwind/README | lib/
@@ -54,7 +53,7 @@ lib/lua_signal.a: ext/lua_signal/lsignal.c | lib/
 	mv ext/lua_signal/signal.so $@
 
 lib/sleep.a: ext/sleep/sleep.c | lib/
-	${CC} ${CFLAGS} -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
+	${CC} ${CFLAGS} -target x86_64-linux-musl -I${luajit_path}/include -Wall -fPIC -O2 -c -static ext/sleep/sleep.c -o $@
 
 lua_modules/%:
 	./luarocks build --only-deps >/dev/null
