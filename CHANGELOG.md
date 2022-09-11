@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Switch back to completely static musl binary since signal issue was not caused by running on musl.
+- Use range instead of stddev for extrapolated full charge discharge time.
+
+### Fixed
+
+- Bug that causes signal handling to stop working (hopefully fixed).
+
 ## [0.2.1] - 2022-09-01
 
 Switches from musl to glibc because of bug in signal library.
