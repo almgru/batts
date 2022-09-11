@@ -82,9 +82,11 @@ elseif args.stats then
       local mean_discharge_rate = math.abs(mean_drain_per_minute * 60)
       local stddev_discharge_rate = stddev_drain_per_minute * 60
       local extrapolated_full_discharge_time = 100 / math.abs(mean_drain_per_minute)
-      local extrapolated_stddev = 100 / (math.abs(mean_drain_per_minute) + math.abs(stddev_drain_per_minute))
       local extrapolated_hours, extrapolated_minutes = date_utils.get_hours_and_minutes(extrapolated_full_discharge_time)
-      local extrapolated_stddev_hours, extrapolated_stddev_minutes = date_utils.get_hours_and_minutes(extrapolated_stddev)
+      local extrapolated_range_lower = 100 / (math.abs(mean_drain_per_minute) + math.abs(stddev_drain_per_minute))
+      local extrapolated_lower_h, extrapolated_lower_m = date_utils.get_hours_and_minutes(extrapolated_range_lower)
+      local extrapolated_range_upper = 100 / (math.abs(mean_drain_per_minute) - math.abs(stddev_drain_per_minute))
+      local extrapolated_upper_h, extrapolated_upper_m = date_utils.get_hours_and_minutes(extrapolated_range_upper)
 
       local battery_cycle_count_file, battery_cycle_count_err = io.open('/sys/class/power_supply/' ..
          battery .. '/cycle_count', 'r')
@@ -150,7 +152,8 @@ elseif args.stats then
 
          if tostring(extrapolated_hours) ~= 'nan' then
             print('extrapolated full charge discharge time:\t' .. extrapolated_hours .. 'h ' .. extrapolated_minutes ..
-               'm (± ' .. extrapolated_stddev_hours .. 'h ' .. extrapolated_stddev_minutes .. 'm)')
+               'm (' .. extrapolated_lower_h .. 'h ' .. extrapolated_lower_m .. 'm – ' .. extrapolated_upper_h ..
+               'h ' .. extrapolated_upper_m .. 'm)')
          end
       end
 
