@@ -2,6 +2,7 @@
 
 - [X] Improve performance
 - [X] Signals (SIGINT, SIGTERM) still not working all the time.
+- [X] Range instead of stddev for extrapolated full charge discharge time
 - [ ] Statistics about charging
     + [ ] Mean charge time
     + [ ] Charge wattage
